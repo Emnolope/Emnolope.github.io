@@ -1,9 +1,25 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 </head>
 
-<body>
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script><br />
+<script type="text/javascript">
+  function myFun(stringy) {
+    return new TradingView.widget({
+      "symbol":stringy,
+      "interval":"D","timezone":"Etc/UTC",
+      "theme":"Light",
+      "style":"1",
+      "locale":"en",
+      "toolbar_bg":"#f1f3f6",
+      "enable_publishing":false,
+      "withdateranges":true,
+      "allow_symbol_change":true,
+      "details":true});
+  }
+</script>
 <style>
 .grid {
   display: grid;
@@ -21,15 +37,15 @@ div > div {
 </style>
 
 <div class="grid">
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>
-  <div>item</div>  
+  <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("DOGEUSD   ")</script></div>
+  <div><script type="text/javascript">myFun("LTCUSD    ")</script></div>  
+  <div><script type="text/javascript">myFun("ETHUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BSVUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BCHUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("ETCUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
 </div>
 
 <style>
@@ -61,29 +77,12 @@ div > div {
     height: 200px;
   }
 </style>
-<h2 id="3x3-grid">3x3 grid</h2>
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script><br />
-  <script type="text/javascript">
-  function myFun(stringy) {
-    return new TradingView.widget({
-      "symbol":stringy,
-      "interval":"D",
-      "timezone":"Etc/UTC",
-      "theme":"Light",
-      "style":"1",
-      "locale":"en",
-      "toolbar_bg":"#f1f3f6",
-      "enable_publishing":false,
-      "withdateranges":true,
-      "allow_symbol_change":true,
-      "details":true});
-    }
-  </script>
+<!--
 <div class="post-content-wrapper">
   <div class="flex flex4">
     <div id='grid1' class="child flex4-child">
       <script type="text/javascript">
-        //myFun("BTCUSD")
+        myFun("BTCUSD")
       </script>
     </div>
     <div id='grid2' class="child flex4-child"></div>
@@ -96,11 +95,10 @@ div > div {
     <div id='grid9' class="child flex4-child"></div>
   </div>  
 </div>
+-->
+
 
 
 
 </body>
 </html>
-
-
-
