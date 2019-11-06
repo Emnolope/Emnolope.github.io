@@ -4,6 +4,30 @@
 <head>
  </head>
 <style>
+ * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.wrap {
+  max-width: 100vh;
+  margin: 0 auto;
+}
+.grid {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid>* {
+  background: orange;
+  padding: 20px;
+  box-shadow: inset 0 0 0 1px #fff;
+}
+/*
 .grid {
   display: grid;
   grid-gap: 0px;
@@ -17,7 +41,6 @@ div > div {
   width: 33vw;
   height: 33vh;
 }
-/*  
 * {
   transform: scale(1, 1)
 }
@@ -62,7 +85,21 @@ div > div {
       "details":true});
   }
 </script>
- <div class="grid">
+ <div class="wrap">
+  <div class="grid">
+    <div class="grid__item"><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("DOGEUSD   ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("LTCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("ETHUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BSVUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BCHUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("ETCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+  </div>
+</div>
+<!--
+<div class="grid">
   <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
   <div><script type="text/javascript">myFun("DOGEUSD   ")</script></div>
   <div><script type="text/javascript">myFun("LTCUSD    ")</script></div>  
@@ -73,6 +110,7 @@ div > div {
   <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
   <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
 </div>
+-->
 <!--
 <div class="post-content-wrapper">
   <div class="flex flex4">
