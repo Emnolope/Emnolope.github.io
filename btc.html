@@ -1,0 +1,134 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ </head>
+<style>
+ * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.wrap {
+  max-width: 100vh;
+  margin: 0 auto;
+}
+.grid {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid>* {
+  background: orange;
+  padding: 20px;
+  box-shadow: inset 0 0 0 1px #fff;
+}
+/*
+.grid {
+  display: grid;
+  grid-gap: 0px;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100vw;
+  height: 100vh;
+}
+div > div {
+  padding: 0px;
+  background-color: #ccc;
+  width: 33vw;
+  height: 33vh;
+}
+* {
+  transform: scale(1, 1)
+}
+.flex {
+  background-color: #f7f7f7;
+  border-radius: 0px;
+  padding: 0px;
+}
+.child {
+  border-radius: 5px;
+  background-color: #A2CBFA;
+  border: 1px solid #4390E1;
+  box-sizing: border-box;
+  box-shadow: 0 2px 2px rgba(0,90,250,0.05),
+    0 4px 4px rgba(0,90,250,0.05),
+    0 8px 8px rgba(0,90,250,0.05),
+    0 16px 16px rgba(0,90,250,0.05);
+}
+.flex4 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.flex4-child {
+  flex: 0 33%;
+  height: 00px;
+}*/
+ </style>
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script><br />
+<script type="text/javascript">
+  function myFun(stringy) {
+    return new TradingView.widget({
+      "symbol":stringy,
+      "interval":"4H","timezone":"Etc/UTC",
+      "theme":"Light",
+      "style":"1",
+      "locale":"en",
+      "toolbar_bg":"#f1f3f6",
+      "enable_publishing":false,
+      "withdateranges":true,
+      "allow_symbol_change":true,
+      "details":true});
+  }
+</script>
+ <div class="wrap">
+  <div class="grid">
+    <div class="grid__item"><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("DOGEUSD   ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("LTCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("ETHUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BSVUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BCHUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("ETCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+    <div class="grid__item"><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+  </div>
+</div>
+<!--
+<div class="grid">
+  <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("DOGEUSD   ")</script></div>
+  <div><script type="text/javascript">myFun("LTCUSD    ")</script></div>  
+  <div><script type="text/javascript">myFun("ETHUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BSVUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BCHUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("ETCUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+  <div><script type="text/javascript">myFun("BTCUSD    ")</script></div>
+</div>
+-->
+<!--
+<div class="post-content-wrapper">
+  <div class="flex flex4">
+    <div id='grid1' class="child flex4-child">
+      <script type="text/javascript">
+        myFun("BTCUSD")
+      </script>
+    </div>
+    <div id='grid2' class="child flex4-child"></div>
+    <div id='grid3' class="child flex4-child"></div>
+    <div id='grid4' class="child flex4-child"></div>
+    <div id='grid5' class="child flex4-child"></div>
+    <div id='grid6' class="child flex4-child"></div>
+    <div id='grid7' class="child flex4-child"></div>
+    <div id='grid8' class="child flex4-child"></div>
+    <div id='grid9' class="child flex4-child"></div>
+  </div>  
+</div>
+-->
+</body>
+</html>
