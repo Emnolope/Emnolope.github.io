@@ -10,14 +10,16 @@ ArrowLeft ArrowDown ArrowRight
 Insert Home PageUp 
 Delete End PageDown 
 */
+
+
 //polysynth.js
-var synth = new Tone.Synth().toMaster();
-class PolySynth extends Tone.PolySynth{
+/*class PolySynth extends Tone.PolySynth{
   startNote(Value){super.triggerAttack(Value)}
   stopNote(Value){super.triggerRelease(Value)}
 }
 mySynth=new Tone.PolySynth (polyphony=20)
-//end polysynth.js
+//end polysynth.js*/
+
 
 //grid.js
 class Grid{
@@ -73,7 +75,7 @@ class Grid{
   delCol(Value){delete this.cols[Value];}
 }
 class NoteGrid extends Grid{
-  constructor(synth){super();this.synth=s}
+  constructor(synth){super();this.synth=synth}
   makeCol(Value){super.makeCol(Value);this.synth.noteOn(Value)}
   delCol(Value){super.delCol(Value);this.synth.noteOff(Value)}
 }//end grid.js
@@ -97,7 +99,18 @@ function easyCommand(longdesc){
     return longdesc;
   return{'shiftdownsemitone':'SDS','shiftupsemitone':'SUS','shiftdownoctave':'SDO','shiftupoctave':'SUO','benddown':'BDS','bendup':'BUS','benddownsemitone':'BDS','bendupsemitone':'BUS','benddownoctave':'BDO','bendupoctave':'BUO','downchannel':'DC','upchannel':'UC','downmap':'DM','upmap':'UM','downscale':'DS','upscale':'US',}[longdesc];
 }
-//down={"Escape":0,"F1":0,"F2":0,"F3":0,"F4":0,"F5":0,"F6":0,"F7":0,"F8":0,"F9":0,"F10":0,"F11":0,"F12":0,"Backquote":0,"Digit1":0,"Digit2":0,"Digit3":0,"Digit4":0,"Digit5":0,"Digit6":0,"Digit7":0,"Digit8":0,"Digit9":0,"Digit0":0,"Minus":0,"Equal":0,"Backspace":0,"Tab":0,"KeyQ":0,"KeyW":0,"KeyE":0,"KeyR":0,"KeyT":0,"KeyY":0,"KeyU":0,"KeyI":0,"KeyO":0,"KeyP":0,"BracketLeft":0,"BracketRight":0,"Backslash":0,"Capslock":0,"KeyA":0,"KeyS":0,"KeyD":0,"KeyF":0,"KeyG":0,"KeyH":0,"KeyJ":0,"KeyK":0,"KeyL":0,"Semicolon":0,"Quote":0,"Enter":0,"ShiftLeft":0,"KeyZ":0,"KeyX":0,"KeyC":0,"KeyV":0,"KeyB":0,"KeyN":0,"KeyM":0,"Comma":0,"Period":0,"Slash":0,"ShiftRight":0,"ArrowUp":0,"ArrowLeft":0,"ArrowDown":0,"ArrowRight":0,"Insert":0,"Home":0,"PageUp":0,"Delete":0,"End":0,"PageDown":0}
+
+
+
+
+
+KILLLLLLLLLLLLLLLLMEEEEEEEEE=1;
+down={"Escape":0,"F1":0,"F2":0,"F3":0,"F4":0,"F5":0,"F6":0,"F7":0,"F8":0,"F9":0,"F10":0,"F11":0,"F12":0,"Backquote":0,"Digit1":0,"Digit2":0,"Digit3":0,"Digit4":0,"Digit5":0,"Digit6":0,"Digit7":0,"Digit8":0,"Digit9":0,"Digit0":0,"Minus":0,"Equal":0,"Backspace":0,"Tab":0,"KeyQ":0,"KeyW":0,"KeyE":0,"KeyR":0,"KeyT":0,"KeyY":0,"KeyU":0,"KeyI":0,"KeyO":0,"KeyP":0,"BracketLeft":0,"BracketRight":0,"Backslash":0,"Capslock":0,"KeyA":0,"KeyS":0,"KeyD":0,"KeyF":0,"KeyG":0,"KeyH":0,"KeyJ":0,"KeyK":0,"KeyL":0,"Semicolon":0,"Quote":0,"Enter":0,"ShiftLeft":0,"KeyZ":0,"KeyX":0,"KeyC":0,"KeyV":0,"KeyB":0,"KeyN":0,"KeyM":0,"Comma":0,"Period":0,"Slash":0,"ShiftRight":0,"ArrowUp":0,"ArrowLeft":0,"ArrowDown":0,"ArrowRight":0,"Insert":0,"Home":0,"PageUp":0,"Delete":0,"End":0,"PageDown":0}
+
+
+
+
+
 allCommands=['shiftdownsemitone','shiftupsemitone','shiftdownoctave','shiftupoctave','benddownsemitone','bendupsemitone','benddownoctave','bendupoctave','downchannel','upchannel','downmap','upmap','downscale','upscale']
 //let usermap={
 /*  'z':36,'a':38,'q':40,'1':41,
@@ -179,28 +192,33 @@ function runOffCommand(comm){
     break;default:              
   }
 }
+
+
+PLEASEJUSTLETMEDIEALREADYMERCY=0
+var synth = new Tone.Synth().toMaster();
+
+
+
 let transpose=0;
-transpose=0;
-//octave=0; --> use transpose instead
+//octave=0; --> uhse transpose instead
 noteMatrix=new NoteGrid();
 function eventHandler(event){
   event.preventDefault();
   if(event.type==="keydown"){
     if (!!(comm=map[event.code])){
-      NoteMatrix.addRow(event.code,comm)
-      
+      console.log(comm);
+      noteMatrix.addRow(event.code,comm)
     }
-    //if (!!(comm=map[event.code])&&!down[event.code]){
-    //  down[event.code]=comm;
-    //  if (Number(comm)){
-    //    shiftNote=Number(comm)+transpose+octave*12;
-    //    down[event.code]=shiftNote;
-    //    noteOn(num2note(shiftNote));
-    //  }else{
-    //    //noteOn(100);//setTimeout(noteOff(100),100);
-    //    runcommand(comm);
-    //  }
-    //}
+  ////if (!!(comm=map[event.code])&&!down[event.code]){
+  ////  down[event.code]=comm;
+  ////  if (Number(comm)){
+  ////    shiftNote=Number(comm)+transpose;
+  ////    down[event.code]=shiftNote;
+  ////    noteOn(num2note(shiftNote));
+  ////  }else{
+  ////    //noteOn(100);//setTimeout(noteOff(100),100);
+  ////    runcommand(comm);
+  ////  }
   }
   if(event.type==="keyup"){
     for(let button in map){
