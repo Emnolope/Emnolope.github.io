@@ -13,11 +13,10 @@ Delete End PageDown
 
 
 //polysynth.js
-/*class PolySynth extends Tone.PolySynth{
+class PolySynth extends Tone.PolySynth{
   startNote(Value){super.triggerAttack(Value)}
   stopNote(Value){super.triggerRelease(Value)}
 }
-mySynth=new Tone.PolySynth (polyphony=20)
 //end polysynth.js*/
 
 
@@ -76,8 +75,16 @@ class Grid{
 }
 class NoteGrid extends Grid{
   constructor(synth){super();this.synth=synth}
-  makeCol(Value){super.makeCol(Value);this.synth.noteOn(Value)}
-  delCol(Value){super.delCol(Value);this.synth.noteOff(Value)}
+  makeCol(Value){
+    super.makeCol(Value);
+    noteOn(Value);
+    //this.synth.startNote(Value);
+  }
+  delCol(Value){
+    super.delCol(Value);
+    noteOff(Value);
+    //this.synth.stopNote(Value);
+  }
 }//end grid.js
 
 function num2note(num){
@@ -201,11 +208,12 @@ var synth = new Tone.Synth().toMaster();
 
 let transpose=0;
 //octave=0; --> uhse transpose instead
-noteMatrix=new NoteGrid();
+mySynth=new Tone.PolySynth(polyphony=20)
+noteMatrix=new NoteGrid(mySynth);
 function eventHandler(event){
   event.preventDefault();
   if(event.type==="keydown"){
-    if (!!(comm=map[event.code])){
+    if(!!(comm=map[event.code])){
       console.log(comm);
       noteMatrix.addRow(event.code,comm)
     }
@@ -216,12 +224,13 @@ function eventHandler(event){
   ////    down[event.code]=shiftNote;
   ////    noteOn(num2note(shiftNote));
   ////  }else{
-  ////    //noteOn(100);//setTimeout(noteOff(100),100);
+  ////    //(100);//setTimeout(noteOff(100),100);
   ////    runcommand(comm);
   ////  }
   }
   if(event.type==="keyup"){
-    for(let button in map){
+    noteMatrix.subRow(event.code)
+    /*for(let button in map){
       if(event.code===easyKey(button)){
         let comm=down[easyKey(button)];
         if (Number(comm)){
@@ -231,7 +240,7 @@ function eventHandler(event){
         }
         down[easyKey(button)]=false;
       }
-    }
+    }*/
   }
 }
 document.addEventListener('keydown',event=>eventHandler(event));
