@@ -4,15 +4,14 @@
 <head>
     <style>
 body {
-    background-color: #131722;
-    margin:0 auto; 
-   transform: scale(0.5);
-   transform-origin: 0 0;
+  background-color: #131722;
+  margin:0 auto;
+  transform: scale(0.5);
+  transform-origin: 0 0;
 }
 * {
   box-sizing: border-box;
 }
-
 .grid {
   display: grid;
   height: 100vh;
@@ -26,10 +25,10 @@ body {
     </style>
 	<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script type="text/javascript">
-function myFun(stringy) {
+function myFun(stringy,tme) {
   return new TradingView.widget({
     "symbol":stringy,
-    "interval":"4H",
+    "interval":tme,
 	"timezone":"Etc/UTC",
     "theme":"Dark",
     "style":"1",
@@ -46,17 +45,33 @@ function myFun(stringy) {
 <body>
     <div class="wrap">
         <div class="grid">
-            <div><script type="text/javascript">myFun("BTCUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("DOGEUSD ")</script></div>
-            <div><script type="text/javascript">myFun("LTCUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("ETHUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("BSVUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("BCHUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("ETCUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("BTCUSD  ")</script></div>
-            <div><script type="text/javascript">myFun("BTCUSD  ")</script></div>
+            <div><script type="text/javascript">myFun("BTCUSD  ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("DOGEUSD ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("LTCUSD  ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("ETHUSD  ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("BSVUSD  ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("BCHUSD  ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("ETCUSD  ","4H ")</script></div>
+            <div><script type="text/javascript">myFun("BTCUSD  ","30M")</script></div>
+            <div><script type="text/javascript">myFun("BTCUSD  ","1M ")</script></div>
         </div>
     </div>
+	<!--
+	<p>Uhh<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></p>
+    <div class="wrap">
+        <div class="grid">
+            <div><object src="https://robinhood.com/crypto/BTC"></iframe></div>
+            <div><object src="https://robinhood.com/crypto/DOGE"></iframe></div>
+            <div><object src="https://robinhood.com/crypto/LTC"></iframe></div>
+            <div><object src="https://robinhood.com/crypto/ETH"></iframe></div>
+            <div><object src="https://robinhood.com/crypto/BSV"></iframe></div>
+            <div><object src="https://robinhood.com/crypto/BCH"></iframe></div>
+            <div><object src="https://robinhood.com/crypto/ETC"></iframe></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+	-->
 </body>
 
 </html>
