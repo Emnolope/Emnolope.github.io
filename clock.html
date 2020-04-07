@@ -30,8 +30,8 @@ function updateClock() {
   milli = milli%1000;
   sec = sec%60;
   min = min%60;
-  var tags = ["h", "m", "s", "mi"],
-    corr = [hou.pad(2), min.pad(2), sec.pad(2), milli];
+  var tags = ["h", "m", "s", "mi"];
+  var corr = [hou.pad(2), min.pad(2), sec.pad(2), milli];
   for (var i = 0; i < tags.length; i++)
     document.getElementById(tags[i]).firstChild.nodeValue = corr[i];
 }
