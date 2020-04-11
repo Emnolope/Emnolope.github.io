@@ -26,6 +26,9 @@ p {
     font-size: 16px;
     margin: 4px 2px;
 }
+.addbutton:hover {
+  background-color: #44eb92;
+}
 .removebutton {
     border-radius: 50%;
     background-color: #4CAF50;
@@ -35,6 +38,8 @@ p {
     text-align: center;
     text-decoration: none;
     display: inline-block;
+	width: 32px;
+	height: 32px;
     font-size: 16px;
     margin: 0px 0px;
 }
@@ -56,18 +61,18 @@ p {
       {
         let var1=3;
       }
-      function addTodo(thingTodo){
-        console.log(thingTodo);
+      function addTodo(thingTodo, timestamp=(new Date()).getTime()){
+        //console.log(thingTodo);
         if (!thingTodo) {return;}
         const el=document.createElement('li');
         el.innerHTML="    "+thingTodo;
-        el.index="var"+addTodo.index;
+		el.index=timestamp;//addTodo.index;
         localStorage.setItem(el.index,input.value);
         addTodo.index++;
         ul.appendChild(el);
         input.value="";
-        addDel(el)
-      }addTodo.index=0;
+        addDel(el);
+      }//addTodo.index=0;
       function addDel(el){
         const deleteButton=document.createElement('button');
         deleteButton.innerHTML=' x ';
@@ -86,7 +91,24 @@ p {
  
         */
       }
-      console.log(input.value)
+      function loadstuff(){
+		for(var busboy=0;busboy<localStorage.length;busboy++){
+		  let thisone=localStorage.key(busboy);
+		  let yeet=localStorage[thisone];
+		  if (yeet)
+            addTodo(localStorage[thisone],thisone);
+	      else
+		    localStorage.removeItem(thisone);
+        }
+      }
+	  input.addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+          button.click();
+        }
+      });
+      console.log(input.value);
+	  setTimeout(loadstuff, 1000);
     </script>
   </body>
 </html>

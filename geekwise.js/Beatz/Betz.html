@@ -3,14 +3,49 @@
   <head>
     <meta charset="UTF-8">
     <title>BEATZ!</title>
+    <style>
+body {
+    background-color:#18ab29
+}
+.myButton {
+    background-color:#44c767;
+    border-radius:42px;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:27px;
+    padding:16px 31px;
+    text-decoration:none;
+	width: 40vw;
+	height: 90vh;
+}
+.myButton:hover {
+    background-color:#5cbf2a;
+}
+.myButton:active {
+    position:relative;
+    top:1px;
+} 
+img{
+    width: 10vw;
+	height: 10vw;
+}
+.centerdiv{ text-align: center;
+}
+	</style>
   </head>
   <body>
-
-    <button onclick="playKick();">kick</button>
-    <button onclick="playSnare();">snare</button>
+    <div class=centerdiv>
+    <button onclick="playKick();" class=myButton>kick</button>
+	
+	<img src="StolenBeat.png" >
+    <button onclick="playSnare();" class=myButton>snare</button>
     <audio id="kick" src="./kick.mp3"></audio>
     <audio id="snare" src="./snare.mp3"></audio>
-    <video id="video" src="./mov_bbb.mp4"></video>
+	</br>
+	</div>
+    <textarea><video id="video" src="./mov_bbb.mp4"></video></textarea>
     <script>
 //const kick=document.querySelector('#kick');
 //const snare=document.querySelector('#snare');
