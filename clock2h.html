@@ -22,7 +22,7 @@ Number.prototype.pad = function(n) {
 };
 function updateClock() {
   var now = (new Date()).getTime()
-  var diff = before - now;
+  var diff = then - now;
   var milli = Math.floor(diff);
   var sec = Math.floor(diff/1000);
   var min = Math.floor(sec/60);
