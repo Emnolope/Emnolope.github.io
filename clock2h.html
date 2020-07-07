@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <style>
+body {
+  background-color:#2d2d2d;
+}
+#timedate {
+  font: small-caps lighter 9.8vw "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  text-align:left;
+  width: 70%;
+  margin: 40px auto;
+  color:#fff;
+  border-left: 6px solid #ed1f24;
+  padding: 20px;
+}
+    </style>
+    <script>
+var then = (new Date()).getTime() + 2 * 60 * 60 * 1000;
+Number.prototype.pad = function(n) {
+  for (var r = this.toString(); r.length < n; r = 0 + r);
+  return r;
+};
+function updateClock() {
+  var now = (new Date()).getTime()
+  var diff = before - now;
+  var milli = Math.floor(diff);
+  var sec = Math.floor(diff/1000);
+  var min = Math.floor(sec/60);
+  var hou = Math.floor(min/60);
+  milli = milli%1000;
+  sec = sec%60;
+  min = min%60;
+  var tags = ["h", "m", "s", "mi"];
+  var corr = [hou.pad(2), min.pad(2), sec.pad(2), milli];
+  for (var i = 0; i < tags.length; i++)
+    document.getElementById(tags[i]).firstChild.nodeValue = corr[i];
+}
+function initClock() {
+  updateClock();
+  window.setInterval("updateClock()", 1);
+}
+    </script>
+  </head>
+  <body onLoad="initClock()">
+    <div id="timedate">
+      <b>TIMER</b></br>
+      <a id="h">12</a> :
+      <a id="m">00</a>:
+      <a id="s">00</a>:
+      <a id="mi">000</a>
+    </div>
+  </body>
+</html>
