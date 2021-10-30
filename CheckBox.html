@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    document.querySelector("#id-checkbox").addEventListener("click", function(event) {
+      document.getElementById("output-box").innerHTML += "<h1><b>Fuck you. Don't touch my box.</b></h1>";
+      event.preventDefault();
+    }, false);
+  </script>
+</head>
+
+<body>
+  <p>Please click on the checkbox control.</p>
+
+  <form>
+    <label for="id-checkbox">Checkbox:</label>
+    <input type="checkbox" id="id-checkbox" />
+  </form>
+
+  <div id="output-box"></div>
+</body>
+</html>
