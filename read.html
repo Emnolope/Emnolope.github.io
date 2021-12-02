@@ -2,14 +2,15 @@
 <html>
 <body>
 
-<h1>Library ReDirect</h1>
+<h1 id="header">Library ReDirect</h1>
 
 <script>
-  id=URLSearchParams(window.location.search).get("b");
+  book=URLSearchParams(window.location.search).get("b");
   books={
     "AAE7":"https://u.pcloud.link/publink/show?code=4shotalK "
   };
-window.location.href = books[id];
+  document.getElementByID("header").innerText=books[book];
+  window.location.href = books[book];
 </script>
 </body>
 </html>
