@@ -4,9 +4,12 @@
 
 <h1>My first PHP page</h1>
 
-<?php
-echo "Hello World!";
-?>
-
+<script>
+  id=URLSearchParams(window.location.search).get("b");
+  books={
+    "AAE7":"https://u.pcloud.link/publink/show?code=4shotalK "
+  };
+window.location.href = books[id];
+</script>
 </body>
 </html>
