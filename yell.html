@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1 id="header">?text=whatever</h1>
+
+<script>
+  text=(new URLSearchParams(window.location.search)).get("text");
+  document.getElementById("header").innerText=text;
+</script>
+</body>
+</html>
