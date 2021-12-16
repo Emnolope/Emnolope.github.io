@@ -10,9 +10,12 @@
     log.innerText+=msg.toString()
   }
   group=(new URLSearchParams(window.location.search)).get("group");
-  ooze=await fetch('https://emnolope.github.io/websites.json')
-    .then(response=>response.text())
-    .then(data => logg(data));
+  ooze=async function() {
+    ooze=await fetch('https://emnolope.github.io/websites.json')
+      .then(response=>response.text())
+      .then(data => logg(data));
+    return ooze;
+  }();
   logg("Ladybug!!!")
   //document.getElementById("header").innerText=book;
   //selection=books[book];
