@@ -5,18 +5,20 @@
 <h1 id="header">Tab Categories</h1>
 <p id="log">Utterly Rediculous, Marinette Dupan Cheng! I'm going to</p>
 <script>
-  log=document.getElementById("log")
+  log=document.getElementById("log");
   function logg(msg){
     log.innerText+=msg.toString()
   }
   group=(new URLSearchParams(window.location.search)).get("group");
-  ooze=async function() {
-    ooze=await fetch('https://emnolope.github.io/websites.json')
-      .then(response=>response.text())
-      .then(data => logg(data));
-    return ooze;
-  }();
-  logg("Ladybug!!!")
+  //ooze=fetch('https://emnolope.github.io/websites.json')
+  //  .then(response=>response.text())
+  //  .then(data => logg(data));
+  ooze=new XMLHttpRequest();
+  ooze.open('GET','https://emnolope.github.io/websites.json',false)
+  ooze.send(null);
+  if (ooze.staus===200) ooze=ooze.responseText();
+  logg(ooze);
+  logg("Ladybug!!!");
   //document.getElementById("header").innerText=book;
   //selection=books[book];
   //if (selection)
