@@ -2,17 +2,21 @@
 <html>
 <body>
 
-<h1 id="header">Library ReDirect</h1>
-
+<h1 id="header">Tab Categories</h1>
+<p id="log"></p>
 <script>
-  book=(new URLSearchParams(window.location.search)).get("b");
-  books={
-    "AAE7":"https://u.pcloud.link/publink/show?code=4shotalK "
-  };
-  document.getElementById("header").innerText=book;
-  selection=books[book];
-  if (selection)
-    window.location.href=selection;
+  log=document.getElementById("log")
+  function logg(msg){
+    log.innerText+=msg.toString()
+  }
+  group=(new URLSearchParams(window.location.search)).get("group");
+  ooze=fetch('https://emnolope.github.io/websites.json')
+    .then(response => response)
+    .then(data => logg(data));
+  //document.getElementById("header").innerText=book;
+  //selection=books[book];
+  //if (selection)
+  //  window.location.href=selection;
 </script>
 </body>
 </html>
