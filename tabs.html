@@ -10,8 +10,9 @@
     log.innerText+=msg.toString()
   }
   group=(new URLSearchParams(window.location.search)).get("group");
+  holdmybeer=" ";
   ooze=fetch('https://emnolope.github.io/websites.json')
-    .then(response => response)
+    .then(function mirror(response){holdmybeer=response;return response;})
     .then(data => logg(data));
   //document.getElementById("header").innerText=book;
   //selection=books[book];
