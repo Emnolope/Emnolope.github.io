@@ -14,11 +14,10 @@
   //  .then(response=>response.text())
   //  .then(data => logg(data));
   ooze=new XMLHttpRequest();
-  setTimeout('logg("1");',1);
   ooze.open('GET','https://emnolope.github.io/websites.json',false)
   ooze.send(null);
-  if (ooze.staus===200) ooze=ooze.responseText();
-  logg("2");
+  logg(ooze.status)
+  ooze=ooze.responseText();
   logg(ooze);
   logg("Ladybug!!!");
   //document.getElementById("header").innerText=book;
