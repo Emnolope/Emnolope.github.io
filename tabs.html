@@ -3,14 +3,14 @@
 <body>
 
 <h1 id="header">Tab Categories</h1>
-<p id="log">Utterly Rediculous, Marinette Dupan Cheng!</p>
+<p id="log">Utterly Rediculous, Marinette Dupan Cheng! I'm going to</p>
 <script>
   log=document.getElementById("log")
   function logg(msg){
     log.innerText+=msg.toString()
   }
   group=(new URLSearchParams(window.location.search)).get("group");
-  ooze=fetch('https://emnolope.github.io/websites.json')
+  ooze=await fetch('https://emnolope.github.io/websites.json')
     .then(response=>response.text())
     .then(data => logg(data));
   logg("Ladybug!!!")
