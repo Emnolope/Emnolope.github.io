@@ -3,16 +3,15 @@
 <body>
 
 <h1 id="header">Tab Categories</h1>
-<p id="log">Utterly Rediculous, Marinette!</p>
+<p id="log">Utterly Rediculous, Marinette Dupan Cheng!</p>
 <script>
   log=document.getElementById("log")
   function logg(msg){
     log.innerText+=msg.toString()
   }
   group=(new URLSearchParams(window.location.search)).get("group");
-  holdmybeer=" ";
   ooze=fetch('https://emnolope.github.io/websites.json')
-    .then(function mirror(response){holdmybeer=response;return response;})
+    .then(response=>response.text())
     .then(data => logg(data));
   //document.getElementById("header").innerText=book;
   //selection=books[book];
