@@ -3,24 +3,35 @@
 <body>
 
 <h1 id="header">Tab Categories</h1>
+<img id="img" src="" />
 <p id="log">Utterly Rediculous, Marinette Dupan Cheng! I'm going to</p>
 <script>
   group=(new URLSearchParams(window.location.search)).get("group");
   log=document.getElementById("log");
+  img=document.getElementById("img");
+  header=document.getElementById("header");
   function logg(msg) {
     log.innerText+=msg.toString()
   }
-  function callbackhell(data) {
+  function callbackhell(data){
     data=data.split('\n\n');
     data=data.map(str=>str.split('\n'));
-    data.length
-    logg(data);
+    for (let i=0; i<data.length; i++){
+      if (data[i][0]==group){
+        render(data[i])
+        return;
+      }
+    }
+  }
+  function render(data){  
+    header.innerText=data[0];
+    img.setAttribute("src",data[1]);
+    log.innerText=data.slice(2).toString();
   }
   ooze = fetch('https://emnolope.github.io/websites.json')
-    .then(response => response.text())
-    .then(data => callbackhell(data));
+  .then(response => response.text())
+  .then(data => callbackhell(data));
   logg("Lad ybug!!!");
-  //document.getElementById("header").innerText=book;
   //sele  ction=books[book];
   //if (selection)
   //  window.location.href=selection;
