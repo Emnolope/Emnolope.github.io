@@ -5,6 +5,7 @@
 <h1 id="header">Tab Categories</h1>
 <img id="img" src="" />
 <p id="log">Utterly Rediculous, Marinette Dupan Cheng! I'm going to</p>
+<a id="edit" href="https://github.com/Emnolope/Emnolope.github.io/edit/master/websites.json">Edit</a>
 <script>
   group=(new URLSearchParams(window.location.search)).get("group");
   log=document.getElementById("log");
@@ -27,8 +28,12 @@
     header.innerText=data[0];
     img.setAttribute("src",data[1]);
     data=data.slice(2);
-    for (let i=0;i<data.length;i++)
-      document.body.innerHTML+=('<a href="'+data[i]+'">'+data[i]+'</a>');
+    for (let i=0;i<data.length;i++){
+      var a = document.createElement('a');
+      a.setAttribute('href',desiredLink);
+      a.innerHTML = desiredText;
+      document.getElementsById('log').appendChild(a);
+    }
     //log.innerText=data.slice(2).toString();
   }
   ooze = fetch('https://emnolope.github.io/websites.json')
