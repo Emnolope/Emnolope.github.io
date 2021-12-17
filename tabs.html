@@ -7,18 +7,18 @@
 <script>
   group=(new URLSearchParams(window.location.search)).get("group");
   log=document.getElementById("log");
-  function logg(msg){
-    console.log(msg);
-    //log.innerText+=msg.toString()
+  function logg(msg) {
+    log.innerText+=msg.toString()
   }
-  function callbackhell(data){
+  function callbackhell(data) {
     data=data.split('\n\n');
     data=data.map(str=>str.split('\n'));
-    logg(data)
+    data.length
+    logg(data);
   }
-  ooze=fetch('https://emnolope.github.io/websites.json')
-    .then(respon se=>response.text())
-    .then(data=>splinter(data));
+  ooze = fetch('https://emnolope.github.io/websites.json')
+    .then(response => response.text())
+    .then(data => callbackhell(data));
   logg("Lad ybug!!!");
   //document.getElementById("header").innerText=book;
   //sele  ction=books[book];
