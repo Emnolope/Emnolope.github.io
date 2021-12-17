@@ -5,23 +5,23 @@
 <h1 id="header">Tab Categories</h1>
 <p id="log">Utterly Rediculous, Marinette Dupan Cheng! I'm going to</p>
 <script>
+  group=(new URLSearchParams(window.location.search)).get("group");
   log=document.getElementById("log");
   function logg(msg){
-    log.innerText+=msg.toString()
+    console.log(msg);
+    //log.innerText+=msg.toString()
   }
-  group=(new URLSearchParams(window.location.search)).get("group");
-  //ooze=fetch('https://emnolope.github.io/websites.json')
-  //  .then(response=>response.text())
-  //  .then(data => logg(data));
-  ooze=new XMLHttpRequest();
-  ooze.open('GET','https://emnolope.github.io/websites.json',false)
-  ooze.send(null);
-  logg(ooze.status);
-  ooze=ooze.text();
-  logg(ooze);
-  logg("Ladybug!!!");
+  function callbackhell(data){
+    data=data.split('\n\n');
+    data=data.map(str=>str.split('\n'));
+    logg(data)
+  }
+  ooze=fetch('https://emnolope.github.io/websites.json')
+    .then(respon se=>response.text())
+    .then(data=>splinter(data));
+  logg("Lad ybug!!!");
   //document.getElementById("header").innerText=book;
-  //selection=books[book];
+  //sele  ction=books[book];
   //if (selection)
   //  window.location.href=selection;
 </script>
