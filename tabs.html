@@ -26,7 +26,10 @@
   function render(data){  
     header.innerText=data[0];
     img.setAttribute("src",data[1]);
-    log.innerText=data.slice(2).toString();
+    data=data.slice(2);
+    for (let i=0;i<data.length;i++)
+      document.write('<a href="'+data[i]+'">'+data[i]+'</a>');
+    //log.innerText=data.slice(2).toString();
   }
   ooze = fetch('https://emnolope.github.io/websites.json')
   .then(response => response.text())
