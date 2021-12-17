@@ -29,10 +29,7 @@
     img.setAttribute("src",data[1]);
     data=data.slice(2);
     for (let i=0;i<data.length;i++){
-      var a = document.createElement('a');
-      a.setAttribute('href',desiredLink);
-      a.innerHTML = desiredText;
-      document.getElementsById('log').appendChild(a);
+document.body.innerHTML+=('<a href="'+data[i]+'">'+data[i]+'</a><br>');
     }
     //log.innerText=data.slice(2).toString();
   }
