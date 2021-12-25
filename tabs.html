@@ -17,13 +17,14 @@
     data=data.split('\n\n');
     data=data.map(str=>str.split('\n'));
     for (let i=0; i<data.length; i++){
+      data[data.length-1].push("https://emnolope.github.io/tabs?group="+data[i][0])
       if (data[i][0]==group){
         render(data[i])
         return;
       }
     }
   }
-  function render(data){  
+  function render(data){
     header.innerText=data[0];
     img.setAttribute("src",data[1]);
     data=data.slice(2);
