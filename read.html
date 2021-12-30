@@ -17,8 +17,8 @@
   function lo(msg) {
     return msg;
   }
-  logg('https://emnolope.github.io/books.txt')
-  fuckyou = logg(fetch('https://emnolope.github.io/books.txt'))
+  lo('https://emnolope.github.io/books.txt')
+  fuckyou = lo(fetch('https://emnolope.github.io/books.txt'))
   .then(response => logg(response.text()))
   .then(library => logg(slicer(library)))
   .then(select=>logg(redirect(select)))
