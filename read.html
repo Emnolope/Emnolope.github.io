@@ -19,9 +19,10 @@
   }
   logg('version forever 2')
   function slicer(library){
-    logg("bp1")
+    logg("bp1");
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
+    logg(library.toString());
     if (group=="")
       group="no book"
     for (let book=0;i<library.length;i++){
@@ -29,7 +30,6 @@
         return library[book][1];
       }
     }
-    logg(library.toString())
   }
   function redirect(select){
     logg("bp2")
