@@ -14,7 +14,7 @@
     log.innerText+=msg.toString()
     return msg;
   }
-  fuckyou = fetch('https://emnolope.github.io/library.json')
+  fuckyou = fetch('https://emnolope.github.io/books.txt')
   .then(response => logg(response.text()))
   .then(library => logg(slicer(library)))
   .then(select=>logg(redirect(select)))
