@@ -17,15 +17,15 @@
   function lo(msg) {
     return msg;
   }
-  logg('version forever 3')
+  logg('version forever 4')
   function slicer(library){
-    logg("bp1");
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
     logg(library.toString());
     if (group=="")
       group="no book"
     for (let book=0;i<library.length;i++){
+      logg(library[book][0]);
       if (library[book][0]==group){
         return library[book][1];
       }
