@@ -18,10 +18,6 @@
     return msg;
   }
   lo('https://emnolope.github.io/books.txt')
-  fuckyou = lo(fetch('https://emnolope.github.io/books.txt'))
-  .then(response => logg(response.text()))
-  .then(library => logg(slicer(library)))
-  .then(select=>logg(redirect(select)))
   function slicer(library){
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
@@ -37,6 +33,10 @@
     if (select)
       window.location.href=select;
   }
+  fuckyou = lo(fetch('https://emnolope.github.io/books.txt'))
+  .then(response => logg(response.text()))
+  .then(library => logg(slicer(library)))
+  .then(select=>logg(redirect(select)))
 </script>
 </body>
 </html>
