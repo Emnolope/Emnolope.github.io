@@ -3,16 +3,35 @@
 <body>
 
 <h1 id="header">Library ReDirect</h1>
-
+<p id="log"></p>
 <script>
   book=(new URLSearchParams(window.location.search)).get("b");
-  books={
-    "AAE7":"https://u.pcloud.link/publink/show?code=4shotalK "
-  };
   document.getElementById("header").innerText=book;
-  selection=books[book];
-  if (selection)
-    window.location.href=selection;
+  log=document.getElementById("log");
+  img=document.getElementById("img");
+  header=document.getElementById("header");
+  function logg(msg) {
+    log.innerText+=msg.toString()
+  }
+  fuckyou = fetch('https://emnolope.github.io/library.json')
+  .then(response => response.text())
+  .then(library => slicer(library))
+  .then(select=>redirect(select))
+  function slicer(library){
+    library=library.split('\n');
+    library=library.map(str=>str.split(' '));
+    if (group=="")
+      group="no book"
+    for (let book=0;i<library.length;i++){
+      if (library[book][0]==group){
+        return library[book][1];
+      }
+    }
+  }
+  function redirect(select){
+    if (select)
+      window.location.href=select;
+  }
 </script>
 </body>
 </html>
