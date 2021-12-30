@@ -5,8 +5,8 @@
 <h1 id="header">Library ReDirect</h1>
 <p id="log"></p>
 <script>
-  isb=(new URLSearchParams(window.location.search)).get("b");
-  document.getElementById("header").innerText=book;
+  isbn=(new URLSearchParams(window.location.search)).get("b");
+  document.getElementById("header").innerText=isbn;
   log=document.getElementById("log");
   img=document.getElementById("img");
   header=document.getElementById("header");
@@ -17,7 +17,7 @@
   function lo(msg) {
     return msg;
   }
-  logg('version forever 4')
+  logg('version forever 6')
   function slicer(library){
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
@@ -26,7 +26,7 @@
       group="no book"
     for (let book=0;i<library.length;i++){
       logg(library[book][0]);
-      if (library[book][0]==isb){
+      if (library[book][0]==isbn){
         return library[book][1];
       }
     }
