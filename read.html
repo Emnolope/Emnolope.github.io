@@ -17,7 +17,7 @@
   function lo(msg) {
     return msg;
   }
-  logg('version forever 0')
+  logg('version forever 2')
   function slicer(library){
     logg("bp1")
     library=library.split('\n');
@@ -29,6 +29,7 @@
         return library[book][1];
       }
     }
+    logg(library.toString())
   }
   function redirect(select){
     logg("bp2")
