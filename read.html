@@ -15,7 +15,7 @@
     return msg;
   }
   logg('https://emnolope.github.io/books.txt')
-  fuckyou = fetch('https://emnolope.github.io/books.txt')
+  fuckyou = logg(fetch('https://emnolope.github.io/books.txt'))
   .then(response => logg(response.text()))
   .then(library => logg(slicer(library)))
   .then(select=>logg(redirect(select)))
