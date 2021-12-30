@@ -21,10 +21,10 @@
   function slicer(library){
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
-    logg(library.toString());
+    //logg(library.toString());
     if (group=="")
       group="no book"
-    for (let book=0;i<library.length;i++){
+    for (let book=0;book<library.length;book++){
       logg(library[book][0]);
       logg(isbn);
       if (library[book][0]==isbn){
