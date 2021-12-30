@@ -23,7 +23,7 @@
     library=library.map(str=>str.split(' '));
     //logg(library.toString());
     for (let book=0;book<library.length;book++){
-      if (library[book][0]==isb){
+      if (library[book][1]==isb){
         return library[book][2];
       }
     }      
