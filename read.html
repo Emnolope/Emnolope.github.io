@@ -23,8 +23,11 @@
     library=library.map(str=>str.split(' '));
     //logg(library.toString());
     for (let book=0;book<library.length;book++){
-      logg(library[book])
-      logg(isb)
+      if (library[book][0]==isb){
+        logg("match!");
+        logg(library[book][0])
+        logg(isb)
+      }
     }      
   }
   function redirect(select){
