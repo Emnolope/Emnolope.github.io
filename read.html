@@ -12,11 +12,12 @@
   header=document.getElementById("header");
   function logg(msg) {
     log.innerText+=msg.toString()
+    return msg;
   }
   fuckyou = fetch('https://emnolope.github.io/library.json')
-  .then(response => response.text())
-  .then(library => slicer(library))
-  .then(select=>redirect(select))
+  .then(response => logg(response.text()))
+  .then(library => logg(slicer(library)))
+  .then(select=>logg(redirect(select)))
   function slicer(library){
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
