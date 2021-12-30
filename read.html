@@ -19,6 +19,7 @@
   }
   logg('version forever 0')
   function slicer(library){
+    logg("bp1")
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
     if (group=="")
@@ -30,6 +31,7 @@
     }
   }
   function redirect(select){
+    logg("bp2")
     if (select)
       window.location.href=select;
   }
