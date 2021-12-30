@@ -5,8 +5,8 @@
 <h1 id="header">Library ReDirect</h1>
 <p id="log"></p>
 <script>
-  isbn=(new URLSearchParams(window.location.search)).get("b");
-  document.getElementById("header").innerText=isbn;
+  isb=(new URLSearchParams(window.location.search)).get("b");
+  document.getElementById("header").innerText=isb;
   log=document.getElementById("log");
   img=document.getElementById("img");
   header=document.getElementById("header");
@@ -17,13 +17,15 @@
   function lo(msg) {
     return msg;
   }
-  logg('version forever 9')
+  logg('version forever 11')
   function slicer(library){
     library=library.split('\n');
     library=library.map(str=>str.split(' '));
-    logg(library.toString());
-    for (let book=0; book<library.length; book++)
-        logg(library[book])
+    //logg(library.toString());
+    for (let book=0;book<library.length;book++){
+      logg(library[book])
+      logg(isb)
+    }      
   }
   function redirect(select){
     logg("bp2")
