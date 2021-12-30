@@ -5,7 +5,7 @@
 <h1 id="header">Library ReDirect</h1>
 <p id="log"></p>
 <script>
-  book=(new URLSearchParams(window.location.search)).get("b");
+  isb=(new URLSearchParams(window.location.search)).get("b");
   document.getElementById("header").innerText=book;
   log=document.getElementById("log");
   img=document.getElementById("img");
@@ -26,7 +26,7 @@
       group="no book"
     for (let book=0;i<library.length;i++){
       logg(library[book][0]);
-      if (library[book][0]==group){
+      if (library[book][0]==isb){
         return library[book][1];
       }
     }
