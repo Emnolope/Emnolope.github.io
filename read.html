@@ -18,10 +18,13 @@
   function decide(data){
     library=data.split('\n');
     library=library.map(str=>str.split(' '));
-    if(!!isb)
+    if(!!isb){
+      logg('soggypog');
       trigger(library);
-    else
+    }
+    else {
       catalogue(library);
+    }
   }
   function catalogue(library){
     for (let book=0;book<library.length;book++){
