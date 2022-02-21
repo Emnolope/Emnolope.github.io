@@ -14,7 +14,7 @@
     log.innerText+=msg.toString()
     return msg;
   }
-  logg('version forever 15')
+  logg('version forever 15.6')
   function decide(data){
     library=data.split('\n');
     library=library.map(str=>str.split(' '));
@@ -22,7 +22,7 @@
       logg('soggypog');
       trigger(library);
     }
-    else {
+    else{
       catalogue(library);
     }
   }
