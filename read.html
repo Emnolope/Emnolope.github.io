@@ -25,6 +25,8 @@
   }
   function catalogue(library){
     for (let book=0;book<library.length;book++){
+      logg(library[book][0]);
+      logg(library[book][1]);
       document.body.innerHTML+=(
         '<a href=https://emnolope.io/read?b="'+
         library[book][1]+
