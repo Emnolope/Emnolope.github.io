@@ -14,29 +14,37 @@
     log.innerText+=msg.toString()
     return msg;
   }
-  function lo(msg) {
-    return msg;
-  }
-  logg('version forever 13')
-  function slicer(library){
-    library=library.split('\n');
+  logg('version forever 15')
+  function decide(data){
+    library=data.split('\n');
     library=library.map(str=>str.split(' '));
-    //logg(library.toString());
+    if(!!isb)
+      trigger(library);
+    else
+      catalogue(library);
+  }
+  function catalogue(library){
+    for (let book=0;book<library.length;book++){
+      document.body.innerHTML+=(
+        '<a href=https://emnolope.io/read?b="'+
+        library[book][1]+
+        '">'+
+        library[book][0]+
+        '</a><br>'
+      );
+    }
+  }
+  function trigger(library){
     for (let book=0;book<library.length;book++){
       if (library[book][1]==isb){
-        return library[book][2];
+        if(library[book][2])
+          window.location.href=select;
       }
     }      
   }
-  function redirect(select){
-    logg("bp2")
-    if (select)
-      window.location.href=select;
-  }
-  fuckyou = lo(fetch('https://emnolope.github.io/books.txt'))
+  fetch('https://emnolope.github.io/books.txt')
   .then(response => logg(response.text()))
-  .then(library => logg(slicer(library)))
-  .then(select=>logg(redirect(select)))
+  .then(data => logg(decide(data)))
 </script>
 </body>
 </html>
