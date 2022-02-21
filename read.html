@@ -14,7 +14,7 @@
     log.innerText+=msg.toString()
     return msg;
   }
-  logg('version forever 16')
+  logg('version forever 16.5')
   function decide(data){
     library=data.split('\n');
     library=library.map(str=>str.split(' '));
@@ -40,10 +40,15 @@
     }
   }
   function trigger(library){
+    logg('stage1');
     for (let book=0;book<library.length;book++){
+      logg('stage1');
       if (library[book][1]==isb){
-        if(!!library[book][2])
+        logg('stage2');
+        if(!!library[book][2]){
+          logg('stage3');
           window.location.href=select;
+        }
       }
     }      
   }
