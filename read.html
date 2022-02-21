@@ -45,9 +45,9 @@
       logg('stage1');
       if (library[book][1]==isb){
         logg('stage2');
-        if(!!library[book][2]){
+        if(library[book][2]){
           logg('stage3');
-          window.location.href=select;
+          window.location.href=library[book][2];
         }
       }
     }      
