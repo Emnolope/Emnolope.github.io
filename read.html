@@ -42,7 +42,7 @@
   function trigger(library){
     for (let book=0;book<library.length;book++){
       if (library[book][1]==isb){
-        if(library[book][2]){
+        if(!!library[book][2]){
           logg('stage3');
           window.location.href=library[book][2];
         }
