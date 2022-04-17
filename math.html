@@ -98,9 +98,51 @@ function myFunction() {
   <!-- FAQ Section -->
   <div class="w3-row w3-padding-64" id="menu">
     <div class="w3-col l6 w3-padding-large">
-      <h4>Which classes do you teach?</h4>
-        <p>College,Calculus I,Calculus II,Calculus III,Chemistry II,College Algebra,Computer Programming,Computer Science,Elementary Statistics,Math,Math Advance,Pre Calculus,Trigonometry,Physics II,Physics I,Physics Advanced,Engineering Electrical,Chemistry I, High School, Algebra,Algebra II,AP Chemistry,AP Physics,AP Statistics,Biology AP,Calculus,Calculus AP,Chemistry,Computer Science,Geometry,Math Advanced,Physics,Pre Algebra,Pre Calculus,SAT Prep Math,Statistics,Trigonometry,Math, Middle School, Math,Math Advanced,Math Middle School,Pre Algebra,Science,Algebra, Elementary School, Math,Math Elementary,Science, Computer, Python,Computer Science</p>
+      <h4 class=collapsible>Which classes do you teach?</h4>
+      <p>College,Calculus I,Calculus II,Calculus III,Chemistry II,College Algebra,Computer Programming,Computer Science,Elementary Statistics,Math,Math Advance,Pre Calculus,Trigonometry,Physics II,Physics I,Physics Advanced,Engineering Electrical,Chemistry I, High School, Algebra,Algebra II,AP Chemistry,AP Physics,AP Statistics,Biology AP,Calculus,Calculus AP,Chemistry,Computer Science,Geometry,Math Advanced,Physics,Pre Algebra,Pre Calculus,SAT Prep Math,Statistics,Trigonometry,Math, Middle School, Math,Math Advanced,Math Middle School,Pre Algebra,Science,Algebra, Elementary School, Math,Math Elementary,Science, Computer, Python,Computer Science</p>
+      <h4 class> 
     </div></div>
+
+<style>
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+</style>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
   <hr>
 
   <!-- Contact Section -->
