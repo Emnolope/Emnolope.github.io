@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <style>
 body {font-family: "Times New Roman", Georgia, Serif;}
 h1, h2, h3, h4, h5, h6 {
@@ -27,7 +26,6 @@ h1, h2, h3, h4, h5, h6 {
     </div>
   </div>
 </div>
-
 <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
 <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
   <a href="#about" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">About</a>
@@ -46,7 +44,6 @@ function myFunction() {
   }
 }
 </script>
-
 <!-- Header -->
 <header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
   <img class="w3-image" src="https://emnolope.github.io/math/mathichat.png" alt="Hamburger Catering" width="1600" height="800">
@@ -54,16 +51,13 @@ function myFunction() {
     <h1 class="w3-xxlarge">The Wizzard's Dungeon</h1>
   </div>
 </header>
-
 <!-- Page content -->
 <div class="w3-content" style="max-width:1100px">
-
   <!-- About Section -->
   <div class="w3-row w3-padding-64" id="about">
     <div class="w3-col m6 w3-padding-large w3-hide-small">
      <img src="https://emnolope.github.io/math/MichealReevesRipOff.jpg" class="w3-round w3-image w3-opacity-min" alt="Table Setting" width="600" height="750">
     </div>
-
     <div class="w3-col m6 w3-padding-large">
       <h1 class="w3-center">Welcome to the Math Dungeon!</h1><br>
       <h5 class="w3-center">Mathematics is the language of nature.</h5>
@@ -71,30 +65,23 @@ function myFunction() {
       <p class="w3-large w3-text-grey w3-hide-medium">Our modern world isn becoming more complex and computer based every year. I believe that having a solid intuitive grasp of mathematics is a crucial part of recognizing and navigating through this world and it's complex problems. I am absolutely thrilled to be in a position where I can pass on this knowledge, inspiration, and passion to others.</p>
     </div>
   </div>
-  
   <hr>
-  
   <!-- Menu Section -->
   <div class="w3-row w3-padding-64" id="menu">
     <div class="w3-col l6 w3-padding-large">
       <h1 class="w3-center">Tutoring Options</h1><br>
       <h4>Kid's Tutoring <span class="w3-tag w3-light-grey">Grade K-10</span></h4>
       <p class="w3-text-grey">When I tutor kids, I take having fun very seriously. I throw puzzles and games and riddles at them which develop their reasoning faculty. Math problems in disguise essentially. We can be doing MineCraft and exploratory Algebra the next.</p><br>
-    
       <h4>Adults <span class="w3-tag w3-light-grey">Grade 11-Undergrad</span></h4>
       <p class="w3-text-grey">I also tutor adults and high school students. For these students I focus on the repair of a broken foundation, and I try to get the students to do the work of exploration themselves. I also prioritize the understanding of specific subjects too, to help with the stresses of exam time.</p><br>
-    
       <h4>Groups</h4>
       <p class="w3-text-grey">I can also do small group sessions. Please contact me for more details.</p>    
     </div>
-    
     <div class="w3-col l6 w3-padding-large">
       <img src="https://newfastuff.com/wp-content/uploads/2019/05/WYjmGGh.png" class="w3-round w3-image w3-opacity-min" alt="Menu" style="width:100%">
     </div>
   </div>
-  
   <hr>
-  
   <!-- FAQ Section -->
   <div class="w3-row w3-padding-64" id="menu">
     <div class="w3-col l6 w3-padding-large">
@@ -107,7 +94,6 @@ function myFunction() {
       <p class="w3-text-grey content">I usually charge from $15 - $25 per hour depending on thr subject and intensity.</p>
     </div>
   </div>
-
 <style>
 .collapsible {
   background-color: light-grey;
@@ -119,11 +105,9 @@ function myFunction() {
   text-align: left;
   outline: none;
 }
-
 .active, .collapsible:hover {
   background-color: grey;
 }
-
 .content {
   padding: 0 18px;
   display: none;
@@ -133,7 +117,6 @@ function myFunction() {
 <script>
 var coll = document.getElementsByClassName("collapsible");
 var i;
-
 for (i = 0; i < coll.length; i++) {
   coll[i].addEventListener("click", function() {
     this.classList.toggle("active");
@@ -147,7 +130,6 @@ for (i = 0; i < coll.length; i++) {
 }
 </script>
   <hr>
-
   <!-- Contact Section -->
   <div class="w3-container w3-padding-64" id="contact">
     <h1>Contact</h1><br>
@@ -162,26 +144,11 @@ for (i = 0; i < coll.length; i++) {
       <p><button class="w3-button w3-light-grey w3-section" type="submit">SEND MESSAGE</button></p>
     </form>
   </div>
-  
-  
 <!-- End page content -->
 </div>
-
 <!-- Footer -->
 <footer class="w3-center w3-light-grey w3-padding-32">
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
 </footer>
-
 </body>
-<script>
-// Used to toggle the menu on small screens when clicking on the menu button
-function myFunction() {
-  var x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else { 
-    x.className = x.className.replace(" w3-show", "");
-  }
-}
-</script>
 </html>
