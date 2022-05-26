@@ -7,6 +7,8 @@
 <p id="log">Utterly Rediculous, Marinette Dupan Cheng! I'm going to</p>
 <script>
   group=(new URLSearchParams(window.location.search)).get("group");
+  if (!(!!group))
+    group="blank"
   log=document.getElementById("log");
   img=document.getElementById("img");
   header=document.getElementById("header");
@@ -16,13 +18,16 @@
   function callbackhell(data){
     data=data.split('\n\n');
     data=data.map(str=>str.split('\n'));
-    if (group=="")
-      group="blank"
     for (let i=0; i<data.length; i++){
       data[data.length-1].push("https://emnolope.github.io/tabs?group="+data[i][0])
       if (data[i][0]==group){
         render(data[i])
         return;
+      }
+    }
+    if (group=="blank") {
+      for (let i=0; i<data[data.length-1].length; i++){
+        render(data[data.length-1][i]);
       }
     }
   }
