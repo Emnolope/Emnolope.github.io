@@ -34,10 +34,12 @@
     img.setAttribute("src",data[1]);
     data=data.slice(2);
     for (let i=0;i<data.length;i++){
-      if data[i].substring(0,2)==="//"
+      if (data[i].substring(0,2)==="//") {
         document.body.innerHTML+=(data[i]);
-      else 
+      }
+      else {
         document.body.innerHTML+=('<a href="'+data[i]+'">'+data[i]+'</a><br>');
+      }
     }
     document.body.innerHTML+='<a id="edit" href="https://github.com/Emnolope/Emnolope.github.io/edit/master/websites.json">Edit</a>'
     //log.innerText=data.slice(2).toString();
