@@ -35,7 +35,7 @@
     data=data.slice(2);
     for (let i=0;i<data.length;i++){
       if (data[i].substring(0,2)==="//") {
-        document.body.innerHTML+=(data[i]);
+        document.body.innerHTML+=(data[i].substring(2));
       }
       else {
         document.body.innerHTML+=('<a href="'+data[i]+'">'+data[i]+'</a><br>');
