@@ -1,31 +1,31 @@
 <!doctype html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="description" content="Folding Code Editor based on CodeMirror 5.35.0">
-    <meta name="keywords" content="CodeMirror, Folding, Code Editor, JavaScript">
-    <meta name="author" content="Your Name or Company Name">
-    <title>Folding Code Editor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/javascript/javascript.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/brace-fold.min.js"></script>
+  <meta charset="utf-8"/>
+  <meta name="description" content="Folding Code Editor based on CodeMirror 5.35.0">
+  <meta name="keywords" content="CodeMirror, Folding, Code Editor, JavaScript">
+  <meta name="author" content="Your Name or Company Name">
+  <title>Folding Code Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/javascript/javascript.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/brace-fold.min.js"></script>
 </head>
 <body>
-    <textarea id='editor'>CODE</textarea>
-    <script>
-        var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-            mode: "javascript",
-            lineNumbers: true,
-            lineWrapping: true,
-            extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
-            foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-        });
-        editor.save();
+  <textarea id='editor'>CODE2</textarea>
+  <script>
+     var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+        mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+      });
+      editor.save();
     </script>
-</body>
+    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+ </body>
