@@ -14,7 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/brace-fold.min.js"></script>
 </head>
 <body>
-  <textarea id='editor'>CODE2</textarea>
+  <textarea id='editor'>CODE3</textarea>
   <script>
      var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
         mode: "javascript",
@@ -26,6 +26,11 @@
       });
       editor.save();
     </script>
+    <style>
+      .CodeMirror {
+        height: 100vh !important;
+      }
+    </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
  </body>
