@@ -1,37 +1,59 @@
 <!doctype html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name="description" content="Folding Code Editor based on CodeMirror 5.35.0">
-  <meta name="keywords" content="CodeMirror, Folding, Code Editor, JavaScript">
-  <meta name="author" content="Your Name or Company Name">
-  <title>Folding Code Editor</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/javascript/javascript.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/indent-fold.min.js"></script>
+    <meta charset="utf-8"/>
+    <title>Indent-based Folding with CodeMirror</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/indent-fold.min.js"></script>
+    <style>
+        .CodeMirror {
+            height: 100vh !important;
+        }
+    </style>
 </head>
 <body>
-  <textarea id='editor'>CODE5</textarea>
-  <script>
-     var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-        mode: "javascript",
-        lineNumbers: true,
-        lineWrapping: true,
-        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-      });
-      editor.save();
+    <textarea id='editor'>7a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\jkl</textarea>
+    <script>
+        CodeMirror.registerHelper("fold", "indent", function(cm, start) {
+            const tabSize = cm.getOption("tabSize");
+            const firstLine = cm.getLine(start.line);
+            const firstIndent = CodeMirror.countColumn(firstLine, null, tabSize);
+
+            let lastLineNo = cm.lastLine();
+            let end;
+
+            for (let i = start.line + 1; i <= lastLineNo; ++i) {
+                let line = cm.getLine(i);
+                let indent = CodeMirror.countColumn(line, null, tabSize);
+
+                if (indent > firstIndent) {
+                    end = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (end == null || end == start.line) return;
+            return {
+                from: CodeMirror.Pos(start.line, firstLine.length),
+                to: CodeMirror.Pos(end, cm.getLine(end).length)
+            };
+        });
+
+        var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+            lineNumbers: true,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            mode: "text/plain",
+            extraKeys: {
+                "Ctrl-Q": function(cm) {
+                    cm.foldCode(cm.getCursor(), CodeMirror.helpers.fold.indent);
+                }
+            }
+        });
     </script>
-    <style>
-      .CodeMirror {
-        height: 100vh !important;
-      }
-    </style>
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
- </body>
+</body>
 </html>
