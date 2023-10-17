@@ -1,59 +1,71 @@
 <!doctype html>
 <head>
-    <meta charset="utf-8"/>
-    <title>Indent-based Folding with CodeMirror</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/indent-fold.min.js"></script>
-    <style>
-        .CodeMirror {
-            height: 100vh !important;
-        }
-    </style>
+  <meta charset="utf-8"/>
+  <title>Folding Code Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/javascript/javascript.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/brace-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/indent-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/search/search.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/search/searchcursor.js"></script>
 </head>
+<style>
+    .CodeMirror {
+       height: 100vh;
+       font-family: Courier New, monospace;
+       font-size: 16px;
+    }
+</style>
 <body>
-    <textarea id='editor'>7a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\jkl</textarea>
-    <script>
-        CodeMirror.registerHelper("fold", "indent", function(cm, start) {
-            const tabSize = cm.getOption("tabSize");
-            const firstLine = cm.getLine(start.line);
-            const firstIndent = CodeMirror.countColumn(firstLine, null, tabSize);
+  <script>
+    // Create the textarea dynamically
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
 
-            let lastLineNo = cm.lastLine();
-            let end;
+    function indentFold(cm, start) {
+      const tabSize = cm.getOption("tabSize");
+      const firstLine = cm.getLine(start.line);
+      const firstIndent = CodeMirror.countColumn(firstLine, null, tabSize);
+      let lastLineNo = cm.lastLine();
+      let end = start.line;
+      let hasIndentedLines = false;
 
-            for (let i = start.line + 1; i <= lastLineNo; ++i) {
-                let line = cm.getLine(i);
-                let indent = CodeMirror.countColumn(line, null, tabSize);
+      while (++end <= lastLineNo) {
+        let line = cm.getLine(end);
+        let indent = CodeMirror.countColumn(line, null, tabSize);
+        if (indent <= firstIndent) break;
+        if (indent > firstIndent) hasIndentedLines = true;
+      }
 
-                if (indent > firstIndent) {
-                    end = i;
-                } else {
-                    break;
-                }
-            }
+      if (!hasIndentedLines) return null;
 
-            if (end == null || end == start.line) return;
-            return {
-                from: CodeMirror.Pos(start.line, firstLine.length),
-                to: CodeMirror.Pos(end, cm.getLine(end).length)
-            };
-        });
+      return {
+        from: CodeMirror.Pos(start.line, firstLine.length),
+        to: CodeMirror.Pos(end - 1, cm.getLine(end - 1).length)
+      };
+    }
 
-        var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-            lineNumbers: true,
-            foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-            mode: "text/plain",
-            extraKeys: {
-                "Ctrl-Q": function(cm) {
-                    cm.foldCode(cm.getCursor(), CodeMirror.helpers.fold.indent);
-                }
-            }
-        });
-    </script>
+    // Apply CodeMirror to the textarea
+    const editor = CodeMirror.fromTextArea(textarea, {
+      mode: "javascript",
+      lineNumbers: true,
+      lineWrapping: true,
+      extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      foldOptions: { rangeFinder: indentFold }
+    });
+    editor.setValue("a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\njkl"); // Sample content
+  </script>
+  <style>
+    .CodeMirror {
+      height: 100vh !important;
+    }
+  </style>
+  <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+  <script>eruda.init();</script>
 </body>
-</html>
