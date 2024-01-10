@@ -1,0 +1,124 @@
+<style>
+  * {
+    font-family: monospace;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px; /* Add padding for better mobile view */
+  }
+
+  .input-textarea, .output-textarea {
+    width: 100%; /* Full width on mobile */
+    max-width: 500px; /* Maximum width for larger screens */
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  #items {
+    border: 1px solid #ddd;
+    width: 100%; /* Full width on mobile */
+    max-width: 500px; /* Maximum width for larger screens */
+    margin-bottom: 10px;
+    padding: 0;
+    list-style: none; /* Use list to define items instead of div */
+    overflow-y: auto; /* Allows vertical scrolling */
+  }
+
+  #items div {
+    border-bottom: 1px solid #ddd;
+    /*padding: 5px; Add padding for better readability */
+    width: 100%; /* Full width of parent */
+    text-align: left; /* Align text to the left */
+    cursor: move;
+    min-height: 1.5em
+  }
+
+  .action-button {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007BFF; /* Background color could be kept, but if you prefer to remove it: */
+    /* background-color: #f4f4f4;  If you want buttons to match body background color */
+    /* color: black; If you change the button background, you may want to change the text color */
+    font-size: 16px;
+    display: block; /* Make buttons full width on mobile */
+    margin: 10px auto; /* Center buttons on mobile */
+    max-width: 200px; /* Maximum width for buttons on larger screens */
+  }
+
+  @media screen and (min-width: 500px) {
+    body {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .button-container {
+      width: 100%;
+      max-width: 500px; /* Maximum width for larger screens */
+      justify-content: space-around;
+      margin-bottom: 10px;
+      padding: 0 10px; /* Add padding for alignment */
+    }
+  }
+</style>
+<textarea id="content" class="input-textarea"></textarea>
+<button class="action-button" onclick="clearList();makeList()">Redo</button>
+<div id="items"></div>
+<button class="action-button" onclick="combineList()">Combine</button>
+<button class="action-button" onclick="reUp()">Re-Up</button>
+<textarea id="combinedContent" class="output-textarea"></textarea>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  makeList();
+
+  let el = document.getElementById('items');
+  var sortable = Sortable.create(el);
+});
+
+function clearList() {
+  let el = document.getElementById('items');
+  while (el.firstChild) {
+    el.removeChild(el.firstChild);
+  }
+}
+let splitter=true;
+function makeList() {
+  let el = document.getElementById('items');
+  let text = document.getElementById('content').value;
+  if (text.includes("\n"))
+    {splitter="\n";}
+  else
+    {splitter=" ";}
+  let items = text.split(splitter);
+  for(let i = 0; i < items.length; i++) {
+    let div = document.createElement('div');
+    div.textContent = items[i];
+    el.appendChild(div);
+  }
+}
+
+function combineList() {
+  let el = document.getElementById('items');
+  let combinedContentEl = document.getElementById('combinedContent');
+  let items = Array.from(el.children).map(item => item.textContent).join(splitter);
+  combinedContentEl.value = items;
+}
+
+function reUp() {
+  document.getElementById('content').value = 
+    document.getElementById('combinedContent').value;
+  document.getElementById('combinedContent').value = "";
+}
+  </script>
