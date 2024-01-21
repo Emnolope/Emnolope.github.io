@@ -59,6 +59,16 @@
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       foldOptions: { rangeFinder: indentFold }
     });
+    editor.on('paste', function(editor, event) {
+      var pastedData = event.clipboardData || window.clipboardData;
+      if(pastedData) {
+        var pastedText = pastedData.getData('Text');
+        event.preventDefault();
+        event.stopPropagation();
+        editor.replaceSelection(pastedText);
+      }
+    });
+
     editor.setValue("a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\njkl"); // Sample content
   </script>
   <style>
