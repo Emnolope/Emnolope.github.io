@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-  <meta charset="utf-8"/>
+  <meta chaset="utf-8"/>
   <title>Folding Code Editor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/addon/fold/foldgutter.css">
@@ -59,17 +59,28 @@
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       foldOptions: { rangeFinder: indentFold }
     });
-    editor.on('paste', function(editor, event) {
-      var pastedData = event.clipboardData || window.clipboardData;
-      if(pastedData) {
-        var pastedText = pastedData.getData('Text');
-        event.preventDefault();
-        event.stopPropagation();
-        editor.replaceSelection(pastedText);
-      }
-    });
 
-    editor.setValue("a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\njkl"); // Sample content
+    // Save content to local storage
+    function saveToLocalStorage() {
+      localStorage.setItem('inputContent', editor.getValue());
+    }
+
+    // Retrieve content from local storage
+    function loadFromLocalStorage() {
+      const inputContent = localStorage.getItem('inputContent');
+      if (inputContent) {
+        editor.setValue(inputContent);
+      }
+    }
+
+    // Save content to local storage when the textarea values change
+    editor.on('change', saveToLocalStorage);
+
+    // Load content from local storage when the page loads
+    window.addEventListener('load', loadFromLocalStorage);
+
+    // Set initial sample content
+    editor.setValue("a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\njkl");
   </script>
   <style>
     .CodeMirror {
