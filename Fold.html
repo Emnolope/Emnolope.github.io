@@ -59,28 +59,33 @@
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       foldOptions: { rangeFinder: indentFold }
     });
-
-    // Save content to local storage
-    function saveToLocalStorage() {
-      localStorage.setItem('inputContent', editor.getValue());
-    }
-
-    // Retrieve content from local storage
-    function loadFromLocalStorage() {
-      const inputContent = localStorage.getItem('inputContent');
-      if (inputContent) {
-        editor.setValue(inputContent);
+    editor.on('paste', function(editor, event) {
+      var pastedData = event.clipboardData || window.clipboardData;
+      if(pastedData) {
+        var pastedText = pastedData.getData('Text');
+        event.preventDefault();
+        event.stopPropagation();
+        editor.replaceSelection(pastedText);
+      }
+    });
+    // Function to save content to localStorage
+    function saveContent() {
+      const content = editor.getValue();
+      try {
+        localStorage.setItem('content', content);
+        console.log('Content saved:', content); // Debug log
+      } catch (e) {
+        console.error('Error saving to localStorage:', e);
       }
     }
-
-    // Save content to local storage when the textarea values change
-    editor.on('change', saveToLocalStorage);
-
-    // Load content from local storage when the page loads
-    window.addEventListener('load', loadFromLocalStorage);
-
-    // Set initial sample content
-    editor.setValue("a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\njkl");
+    editor.on('change', saveContent);
+    function initializeEditor() {
+      const savedContent = localStorage.getItem('content');
+      const initialContent = savedContent || "a\nb\nc\nFold 1\n    abc\n    Fold 2\n        def\n        ghi\njkl";
+      editor.setValue(initialContent);
+    }
+    // Replace your window.addEventListener('load', loadContent) with:
+    window.addEventListener('load', initializeEditor);
   </script>
   <style>
     .CodeMirror {
