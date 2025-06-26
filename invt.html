@@ -14,7 +14,7 @@
 <body>
   <div id="app">
     <div id="mode0" class="mode">
-      <video id="camera" autoplay playsinline onclick="savePhoto(capturePhoto())"></video>
+      <video id="camera" autoplay playsinline onclick="rapidFireCapture()"></video>
     </div>
     <div id="mode1" class="mode placeholder">SLOW PICTURE MODE</div>
     <div id="mode2" class="mode placeholder">GALLERY VIEW</div>
@@ -64,6 +64,24 @@ function capturePhoto() {
   canvas.getContext('2d').drawImage(video, 0, 0);
   return canvas.toDataURL('image/jpeg');
 }
+////// HIGH LEVEL //////
+async function saveInventoryItem(metadata, imageData) {
+  if (!dirHandle) {
+    log('No folder selected');
+    return;
+  }
+  const filename = generateFilename(metadata);
+  const response = await fetch(imageData);
+  const blob = await response.blob();
+  await writeFile(filename, blob);
+  log(`📸 Saved: ${filename}`);
+  return filename;
+}
+async function rapidFireCapture() {
+  const imageData = capturePhoto();
+  const metadata = createEmptyMetadata();
+  await saveInventoryItem(metadata, imageData);
+}
 ////// UI OPERATIONS //////
 const modes = ['📸', '🐌', '🖼️', '📊', '⚙️'];
 let currentMode = 0;
@@ -81,43 +99,48 @@ function log(msg) {
   document.getElementById('output').innerHTML += `<div>${msg}</div>`;
 }
 function parseFilename(filename) {
-  const lastDot = filename.lastIndexOf('.');
-  const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
-  const ext = lastDot > 0 ? filename.slice(lastDot) : '';
-  return { name, ext, original: filename };
+  const [name, ext] = filename.split('.');
+  const parts = name.split('_');
+  if (parts.length !== 8) return { original: filename, valid: false };
+  return {
+    location: parts[0], sublocation: parts[1], types: parts[2],
+    getFlag: parts[3], deleteFlag: parts[4], selectFlag: parts[5],
+    item: parts[6], timestamp: parts[7], ext: ext || 'jpg', 
+    original: filename, valid: true
+  };
 }
-function generateFilename(metadata) {
-  return `${metadata.name}${metadata.ext}`;
+function generateFilename(meta) {
+  return `${meta.location}_${meta.sublocation}_${meta.types}_${meta.getFlag}_${meta.deleteFlag}_${meta.selectFlag}_${meta.item}_${meta.timestamp}.${meta.ext}`;
 }
-function transformName(metadata, rule) {
-  if (rule === 'reverse') {
-    return { ...metadata, name: metadata.name.split('').reverse().join('') };
-  }
-  return metadata;
+function generateUUID() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hour = String(now.getHours()).padStart(2, '0');
+  const min = String(now.getMinutes()).padStart(2, '0');
+  const sec = String(now.getSeconds()).padStart(2, '0');
+  const mil = String(now.getMilliseconds()).padStart(3, '0');
+  return `${year}${month}${day}${hour}${min}${sec}${mil}`;
 }
-////// HIGH LEVEL //////
+
+function createEmptyMetadata() 
+  return {
+    location: '', sublocation: '', types: '', 
+    getFlag: '', deleteFlag: '', selectFlag: '', 
+    item: '', timestamp: generateUUID(), ext: 'jpg'
+  };
+}
 async function pickFolder() {
   try {
     dirHandle = await window.showDirectoryPicker();
     log('📁 Folder selected');
     const inventory = await loadInventory();
-    log(`📄 Found: [${inventory.map(i => i.original).join(', ')}]`);
+    log(`📄 Found ${inventory.length} valid items`);
   } catch (e) {
     log(`❌ ${e.message}`);
   }
 }
-async function savePhoto(imageData) {
-  if (!dirHandle) {
-    log('No folder selected');
-    return;
-  }
-  const filename = `photo_${Date.now()}.jpg`;
-  const response = await fetch(imageData);
-  const blob = await response.blob();
-  await writeFile(filename, blob);
-  log(`📸 Saved: ${filename}`);
-}
-
 async function loadInventory() {
   const filenames = await listFiles();
   return filenames.map(parseFilename);
