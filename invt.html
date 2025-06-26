@@ -14,7 +14,7 @@
 <body>
   <div id="app">
     <div id="mode0" class="mode">
-      <video id="camera" autoplay playsinline onclick="takePhoto()"></video>
+      <video id="camera" autoplay playsinline onclick="savePhoto(capturePhoto())"></video>
     </div>
     <div id="mode1" class="mode placeholder">SLOW PICTURE MODE</div>
     <div id="mode2" class="mode placeholder">GALLERY VIEW</div>
@@ -26,143 +26,115 @@
   </div>
   <button id="modeBtn" onclick="nextMode()"></button>
   <script>
-    // UI STATE
-    const modes = ['RAPID', 'SLOW', 'GALLERY', 'TABLE', 'SETTINGS'];
-    let currentMode = 0;
-    
-    function nextMode() {
-      currentMode = (currentMode + 1) % modes.length;
-      render();
-    }
-    
-    function render() {
-      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
-      document.getElementById(`mode${currentMode}`).classList.add('active');
-      document.getElementById('modeBtn').textContent = modes[currentMode];
-    }
-    
-    // CAMERA
-    async function startCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({video: true});
-        document.getElementById('camera').srcObject = stream;
-      } catch(e) { console.log('Camera failed:', e); }
-    }
-    
-    // CAPTURE FUNCTION - Returns image data
-    function capturePhoto() {
-      const canvas = document.createElement('canvas');
-      const video = document.getElementById('camera');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-      return canvas.toDataURL('image/jpeg');
-    }
+// GLOBAL STATE
+let dirHandle;
+////// I/O OPERATIONS //////
+async function listFiles() {
+  const files = [];
+  for await (const [name, handle] of dirHandle.entries()) {
+    if (handle.kind === 'file') files.push(name);
+  }
+  return files;
+}
+async function readFile(filename) {
+  const handle = await dirHandle.getFileHandle(filename);
+  return await handle.getFile();
+}
+async function writeFile(filename, data) {
+  const handle = await dirHandle.getFileHandle(filename, {create: true});
+  const writer = await handle.createWritable();
+  await writer.write(data);
+  await writer.close();
+}
+async function deleteFile(filename) {
+  await dirHandle.removeEntry(filename);
+}
+////// CAMERA //////
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({video: true});
+    document.getElementById('camera').srcObject = stream;
+  } catch(e) { log('Camera failed:', e); }
+}
+function capturePhoto() {
+  const canvas = document.createElement('canvas');
+  const video = document.getElementById('camera');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  return canvas.toDataURL('image/jpeg');
+}
+////// UI OPERATIONS //////
+const modes = ['📸', '🐌', '🖼️', '📊', '⚙️'];
+let currentMode = 0;
 
-    // DOWNLOAD FUNCTION - Uses your writeFile function
-    async function savePhoto(imageData) {
-      if (!dirHandle) {
-        console.log('No folder selected');
-        return;
-      }
-     
-      const filename = `photo_${Date.now()}.jpg`;
-     
-      // Convert base64 to blob
-      const response = await fetch(imageData);
-      const blob = await response.blob();
-     
-      await writeFile(dirHandle, filename, blob);
-      console.log(`📸 Saved: ${filename}`);
-    }
-    
-    // CLICK HANDLER - Captures then saves to folder
-    async function takePhoto() {
-      if (currentMode === 0) {
-        const imageData = capturePhoto();
-        await savePhoto(imageData);
-      }
-    }
+function nextMode() {
+  currentMode = (currentMode + 1) % modes.length;
+  render();
+}
+function render() {
+  document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+  document.getElementById(`mode${currentMode}`).classList.add('active');
+  document.getElementById('modeBtn').textContent = modes[currentMode];
+}
+function log(msg) {
+  document.getElementById('output').innerHTML += `<div>${msg}</div>`;
+}
+function parseFilename(filename) {
+  const lastDot = filename.lastIndexOf('.');
+  const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
+  const ext = lastDot > 0 ? filename.slice(lastDot) : '';
+  return { name, ext, original: filename };
+}
+function generateFilename(metadata) {
+  return `${metadata.name}${metadata.ext}`;
+}
+function transformName(metadata, rule) {
+  if (rule === 'reverse') {
+    return { ...metadata, name: metadata.name.split('').reverse().join('') };
+  }
+  return metadata;
+}
+////// HIGH LEVEL //////
+async function pickFolder() {
+  try {
+    dirHandle = await window.showDirectoryPicker();
+    log('📁 Folder selected');
+    const inventory = await loadInventory();
+    log(`📄 Found: [${inventory.map(i => i.original).join(', ')}]`);
+  } catch (e) {
+    log(`❌ ${e.message}`);
+  }
+}
+async function savePhoto(imageData) {
+  if (!dirHandle) {
+    log('No folder selected');
+    return;
+  }
+  const filename = `photo_${Date.now()}.jpg`;
+  const response = await fetch(imageData);
+  const blob = await response.blob();
+  await writeFile(filename, blob);
+  log(`📸 Saved: ${filename}`);
+}
 
-    // CORE LAYER - Pure Functions (No I/O)
-    function parseFilename(filename) {
-      const lastDot = filename.lastIndexOf('.');
-      const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
-      const ext = lastDot > 0 ? filename.slice(lastDot) : '';
-      return { name, ext, original: filename };
-    }
-    
-    function generateFilename(metadata) {
-      return `${metadata.name}${metadata.ext}`;
-    }
-    
-    function transformName(metadata, rule) {
-      if (rule === 'reverse') {
-        return { ...metadata, name: metadata.name.split('').reverse().join('') };
-      }
-      return metadata;
-    }
-    
-    // SERVICE LAYER - I/O Operations (No Business Logic)
-    async function listFiles(dirHandle) {
-      const files = [];
-      for await (const [name, handle] of dirHandle.entries()) {
-        if (handle.kind === 'file') files.push(name);
-      }
-      return files;
-    }
-    
-    async function readFile(dirHandle, filename) {
-      const handle = await dirHandle.getFileHandle(filename);
-      return await handle.getFile();
-    }
-    
-    async function writeFile(dirHandle, filename, data) {
-      const handle = await dirHandle.getFileHandle(filename, {create: true});
-      const writer = await handle.createWritable();
-      await writer.write(data);
-      await writer.close();
-    }
-    
-    async function deleteFile(dirHandle, filename) {
-      await dirHandle.removeEntry(filename);
-    }
-    
-    // APPLICATION LAYER - Business Logic (Combines Pure + I/O)
-    let dirHandle;
-    async function loadInventory(dirHandle) {
-      const filenames = await listFiles(dirHandle);
-      return filenames.map(parseFilename);
-    }
-    
-      async function updateInventoryItem(dirHandle, oldFilename, transformation) {
-      const oldMetadata = parseFilename(oldFilename);
-      const newMetadata = transformName(oldMetadata, transformation);
-      const newFilename = generateFilename(newMetadata);
-      
-      const fileData = await readFile(dirHandle, oldFilename);
-      await writeFile(dirHandle, newFilename, fileData);
-      await deleteFile(dirHandle, oldFilename);
-      
-      return { old: oldFilename, new: newFilename };
-    }
-    // UI OPERATIONS
-    function log(msg) {
-      document.getElementById('output').innerHTML += `<div>${msg}</div>`;
-    }
-    
-    async function pickFolder() {
-      try {
-        dirHandle = await window.showDirectoryPicker();
-        log('📁 Folder selected');
-        const inventory = await loadInventory(dirHandle);
-        log(`📄 Found: [${inventory.map(i => i.original).join(', ')}]`);
-      } catch (e) {
-        log(`❌ ${e.message}`);
-      }
-    }
-    
-    window.onload = () => { render(); startCamera(); };
+async function loadInventory() {
+  const filenames = await listFiles();
+  return filenames.map(parseFilename);
+}
+async function updateInventoryItem(oldFilename, transformation) {
+  const oldMetadata = parseFilename(oldFilename);
+  const newMetadata = transformName(oldMetadata, transformation);
+  const newFilename = generateFilename(newMetadata);
+  const fileData = await readFile(oldFilename);
+  await writeFile(newFilename, fileData);
+  await deleteFile(oldFilename);
+  return { old: oldFilename, new: newFilename };
+}
+window.onload = function init() {
+  render();
+  startCamera();
+}
   </script>
 </body>
 </html>
