@@ -1,5 +1,6 @@
-<!doctype html>
-<html><head>
+<!DOCTYPE html>
+<html>
+<head>
 <title>Demo - Capture Photo From Webcam Using Javascript</title>
 <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,10 +43,11 @@
 #resetBtn{
     margin: 10px 20px 0px 20px;
     display: none;
-}</style>
+}
+  </style>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><style type="text/css" id="operaUserStyle"></style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
@@ -53,14 +55,14 @@
     <div class="container p-3 my-3">
         <div class="row">
             <h3>Capture Photo using JavaScript Web API</h3>    
-            <button class="btn btn-primary" id="start-camera" style="display: none;"><i class="fas fa-camera"></i> Start Camera</button>
+            <button class="btn btn-primary" id="start-camera"><i class="fas fa-camera"></i> Start Camera</button>
         </div>
         <div class="row align-items-center">
             <div class="col-lg-5">
-                <video id="video" autoplay="" style="display: block;"></video>
+                <video id="video" autoplay></video>
             </div>
             <div class="col-lg-2 justify-content-center">
-                <button class="btn btn-primary" id="click-photo" style="display: block;"><i class="fas fa-camera-retro"></i> Click Photo </button>
+                <button class="btn btn-primary" id="click-photo"><i class="fas fa-camera-retro"></i> Click Photo </button>
                 <button class="btn btn-secondary" id="resetBtn"><i class="fas fa-sync-alt"></i> Reset </button>
             </div>
             <div class="col-lg-5" id="dataurl-container">
@@ -81,6 +83,7 @@ let dataurl_container = document.querySelector("#dataurl-container");
 let downloadBtn = document.querySelector("#downloadID");
 let resetBtn = document.querySelector("#resetBtn");
 let fileName = document.querySelector("#fileName");
+
 camera_button.addEventListener('click', async function() {
    	let stream = null;
     try {
@@ -95,6 +98,7 @@ camera_button.addEventListener('click', async function() {
     camera_button.style.display = 'none';
     click_button.style.display = 'block';
 });
+
 click_button.addEventListener('click', function() {
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
    	let image_data_url = canvas.toDataURL('image/jpeg');
@@ -104,9 +108,11 @@ click_button.addEventListener('click', function() {
     fileName.style.display = 'block';
     resetBtn.style.display = 'block';
 });
+
 fileName.addEventListener('keyup', function() {    
     downloadBtn.download = fileName.value + '.jpeg';
 });
+
 resetBtn.addEventListener('click', function() {    
     dataurl_container.style.display = 'none';
     downloadBtn.download = '';
@@ -115,6 +121,6 @@ resetBtn.addEventListener('click', function() {
     fileName.value = '';
     fileName.style.display = 'none';
 });
-</script>
-</body><div id="detach-button-host" style="--opera-video-toolbar-button-color-contrasting: hsla(0, 0%, 100%, 1); top: 73.5972px; left: 270.139px;"></div><div class="hidden" id="qr-host" style="--opera-video-toolbar-button-color-contrasting: hsla(0, 0%, 100%, 1);"></div></html>
-
+    </script>
+</body>
+</html>
