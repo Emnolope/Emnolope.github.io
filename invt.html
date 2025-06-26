@@ -1,126 +1,137 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Demo - Capture Photo From Webcam Using Javascript</title>
-<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventory App</title>
   <style>
-#start-camera {
-    margin-top: 50px;
-}
-
-#video {
-    display: none;
-    width: 100%;
-}
-
-#click-photo {
-    display: none;
-}
-
-#dataurl-container {
-    display: none;
-}
-
-#canvas {
-    display: block;
-    width: 100%;
-}
-
-#dataurl-header {
-    text-align: center;
-    font-size: 15px;
-}
-
-#fileName{
-    display: none;
-    width: 30%;
-}
-#downloadID{
-    display: none;
-}
-
-#resetBtn{
-    margin: 10px 20px 0px 20px;
-    display: none;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .mode { display: none; }
+    .mode.active { display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; }
+    #modeBtn { position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px; }
+    #camera { width: 100vw; height: 100vh; object-fit: cover; cursor: pointer; }
+    .placeholder { display: flex; align-items: center; justify-content: center; font-size: 3em; background: #333; color: white; }
   </style>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container p-3 my-3">
-        <div class="row">
-            <h3>Capture Photo using JavaScript Web API</h3>    
-            <button class="btn btn-primary" id="start-camera"><i class="fas fa-camera"></i> Start Camera</button>
-        </div>
-        <div class="row align-items-center">
-            <div class="col-lg-5">
-                <video id="video" autoplay></video>
-            </div>
-            <div class="col-lg-2 justify-content-center">
-                <button class="btn btn-primary" id="click-photo"><i class="fas fa-camera-retro"></i> Click Photo </button>
-                <button class="btn btn-secondary" id="resetBtn"><i class="fas fa-sync-alt"></i> Reset </button>
-            </div>
-            <div class="col-lg-5" id="dataurl-container">
-                <canvas id="canvas" width="420" height="240"></canvas>
-            </div>
-        </div>  
-        <div class="row justify-content-end p-3" id="downloadDIV">
-            <input class="form-control" type="text" id="fileName" placeholder="Enter File Name">
-            <a class="btn btn-link" id="downloadID">Download</a>
-        </div>      
+  <div id="app">
+    <div id="mode0" class="mode">
+      <video id="camera" autoplay playsinline onclick="takePhoto()"></video>
     </div>
-    <script>
-let camera_button = document.querySelector("#start-camera");
-let video = document.querySelector("#video");
-let click_button = document.querySelector("#click-photo");
-let canvas = document.querySelector("#canvas");
-let dataurl_container = document.querySelector("#dataurl-container");
-let downloadBtn = document.querySelector("#downloadID");
-let resetBtn = document.querySelector("#resetBtn");
-let fileName = document.querySelector("#fileName");
-
-camera_button.addEventListener('click', async function() {
-   	let stream = null;
-    try {
-    	stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    <div id="mode1" class="mode placeholder">SLOW PICTURE MODE</div>
+    <div id="mode2" class="mode placeholder">GALLERY VIEW</div>
+    <div id="mode3" class="mode placeholder">TABLE VIEW</div>
+    <div id="mode4" class="mode placeholder">
+      <button onclick="pickFolder()">Pick Folder</button>
+      <div id="output"></div>
+    </div>
+  </div>
+  <button id="modeBtn" onclick="nextMode()"></button>
+  <script>
+    // UI STATE
+    const modes = ['RAPID', 'SLOW', 'GALLERY', 'TABLE', 'SETTINGS'];
+    let currentMode = 0;
+    
+    function nextMode() {
+      currentMode = (currentMode + 1) % modes.length;
+      render();
     }
-    catch(error) {
-    	alert(error.message);
-    	return;
+    
+    function render() {
+      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+      document.getElementById(`mode${currentMode}`).classList.add('active');
+      document.getElementById('modeBtn').textContent = modes[currentMode];
     }
-    video.srcObject = stream;
-    video.style.display = 'block';
-    camera_button.style.display = 'none';
-    click_button.style.display = 'block';
-});
-
-click_button.addEventListener('click', function() {
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-   	let image_data_url = canvas.toDataURL('image/jpeg');
-	downloadBtn.href = image_data_url;
-    dataurl_container.style.display = 'block';
-    downloadBtn.style.display = 'block';
-    fileName.style.display = 'block';
-    resetBtn.style.display = 'block';
-});
-
-fileName.addEventListener('keyup', function() {    
-    downloadBtn.download = fileName.value + '.jpeg';
-});
-
-resetBtn.addEventListener('click', function() {    
-    dataurl_container.style.display = 'none';
-    downloadBtn.download = '';
-    downloadBtn.style.display = 'none';
-    resetBtn.style.display = 'none';
-    fileName.value = '';
-    fileName.style.display = 'none';
-});
-    </script>
+    
+    // CAMERA
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        document.getElementById('camera').srcObject = stream;
+      } catch(e) { console.log('Camera failed:', e); }
+    }
+    
+    function takePhoto() {
+      if (currentMode === 0) console.log('📸 Photo taken!');
+    }
+    
+    // CORE LAYER - Pure Functions (No I/O)
+    function parseFilename(filename) {
+      const lastDot = filename.lastIndexOf('.');
+      const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
+      const ext = lastDot > 0 ? filename.slice(lastDot) : '';
+      return { name, ext, original: filename };
+    }
+    
+    function generateFilename(metadata) {
+      return `${metadata.name}${metadata.ext}`;
+    }
+    
+    function transformName(metadata, rule) {
+      if (rule === 'reverse') {
+        return { ...metadata, name: metadata.name.split('').reverse().join('') };
+      }
+      return metadata;
+    }
+    
+    // SERVICE LAYER - I/O Operations (No Business Logic)
+    async function listFiles(dirHandle) {
+      const files = [];
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (handle.kind === 'file') files.push(name);
+      }
+      return files;
+    }
+    
+    async function readFile(dirHandle, filename) {
+      const handle = await dirHandle.getFileHandle(filename);
+      return await handle.getFile();
+    }
+    
+    async function writeFile(dirHandle, filename, data) {
+      const handle = await dirHandle.getFileHandle(filename, {create: true});
+      const writer = await handle.createWritable();
+      await writer.write(data);
+      await writer.close();
+    }
+    
+    async function deleteFile(dirHandle, filename) {
+      await dirHandle.removeEntry(filename);
+    }
+    
+    // APPLICATION LAYER - Business Logic (Combines Pure + I/O)
+    let dirHandle;
+    async function loadInventory(dirHandle) {
+      const filenames = await listFiles(dirHandle);
+      return filenames.map(parseFilename);
+    }
+    
+      async function updateInventoryItem(dirHandle, oldFilename, transformation) {
+      const oldMetadata = parseFilename(oldFilename);
+      const newMetadata = transformName(oldMetadata, transformation);
+      const newFilename = generateFilename(newMetadata);
+      
+      const fileData = await readFile(dirHandle, oldFilename);
+      await writeFile(dirHandle, newFilename, fileData);
+      await deleteFile(dirHandle, oldFilename);
+      
+      return { old: oldFilename, new: newFilename };
+    }
+    // UI OPERATIONS
+    function log(msg) {
+      document.getElementById('output').innerHTML += `<div>${msg}</div>`;
+    }
+    
+    async function pickFolder() {
+      try {
+        dirHandle = await window.showDirectoryPicker();
+        log('📁 Folder selected');
+        const inventory = await loadInventory(dirHandle);
+        log(`📄 Found: [${inventory.map(i => i.original).join(', ')}]`);
+      } catch (e) {
+        log(`❌ ${e.message}`);
+      }
+    }
+    
+    window.onload = () => { render(); startCamera(); };
+  </script>
 </body>
 </html>
