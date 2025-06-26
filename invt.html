@@ -58,20 +58,32 @@
       canvas.getContext('2d').drawImage(video, 0, 0);
       return canvas.toDataURL('image/jpeg');
     }
-    // DOWNLOAD FUNCTION - Takes image data and saves it
-    function downloadPhoto(imageData) {
+
+    // DOWNLOAD FUNCTION - Uses your writeFile function
+    async function savePhoto(imageData) {
+      if (!dirHandle) {
+        console.log('No folder selected');
+        return;
+      }
+     
       const filename = `photo_${Date.now()}.jpg`;
-      const link = document.createElement('a');
-      link.href = imageData;
-      link.download = filename;
-      link.click();
+     
+      // Convert base64 to blob
+      const response = await fetch(imageData);
+      const blob = await response.blob();
+     
+      await writeFile(dirHandle, filename, blob);
+      console.log(`📸 Saved: ${filename}`);
+    }
+    
+    // CLICK HANDLER - Captures then saves to folder
+    async function takePhoto() {
+      if (currentMode === 0) {
+        const imageData = capturePhoto();
+        await savePhoto(imageData);
+      }
     }
 
-    // CLICK HANDLER - Captures then downloads
-    function takePhoto() {
-      const imageData = capturePhoto();
-      downloadPhoto(imageData);
-    }
     // CORE LAYER - Pure Functions (No I/O)
     function parseFilename(filename) {
       const lastDot = filename.lastIndexOf('.');
