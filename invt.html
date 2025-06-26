@@ -81,22 +81,20 @@
             try {
                 dirHandle = await window.showDirectoryPicker();
                 log('📁 Folder selected');
-                
-                const inventory = await loadInventory(dirHandle);
-                log(`📄 Before: [${inventory.map(i => i.original).join(', ')}]`);
-                
-                const results = [];
-                for (const item of inventory) {
-                    const result = await updateInventoryItem(dirHandle, item.original, 'reverse');
-                    results.push(result);
-                    log(`✅ ${result.old} → ${result.new}`);
-                }
-                
-                const newInventory = await loadInventory(dirHandle);
-                log(`📄 After: [${newInventory.map(i => i.original).join(', ')}]`);
-                
+                await processFiles();
+                await processFiles(); // Reverses back
             } catch (e) {
                 log(`❌ ${e.message}`);
+            }
+        }
+        
+        async function processFiles() {
+            const inventory = await loadInventory(dirHandle);
+            log(`📄 Before: [${inventory.map(i => i.original).join(', ')}]`);
+            
+            for (const item of inventory) {
+                const result = await updateInventoryItem(dirHandle, item.original, 'reverse');
+                log(`✅ ${result.old} → ${result.new}`);
             }
         }
     </script>
