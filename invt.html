@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Layered Architecture File Demo</title>
+</head>
+<body>
+    <button onclick="pickFolder()">Pick Folder</button>
+    <div id="output"></div>
+
+    <script>
+        let dirHandle;
+        
+        function log(msg) {
+            document.getElementById('output').innerHTML += `<div>${msg}</div>`;
+        }
+        
+        // CORE LAYER - Pure Functions (No I/O)
+        function parseFilename(filename) {
+            const lastDot = filename.lastIndexOf('.');
+            const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
+            const ext = lastDot > 0 ? filename.slice(lastDot) : '';
+            return { name, ext, original: filename };
+        }
+        
+        function generateFilename(metadata) {
+            return `${metadata.name}${metadata.ext}`;
+        }
+        
+        function transformName(metadata, rule) {
+            if (rule === 'reverse') {
+                return { ...metadata, name: metadata.name.split('').reverse().join('') };
+            }
+            return metadata;
+        }
+        
+        // SERVICE LAYER - I/O Operations (No Business Logic)
+        async function listFiles(dirHandle) {
+            const files = [];
+            for await (const [name, handle] of dirHandle.entries()) {
+                if (handle.kind === 'file') files.push(name);
+            }
+            return files;
+        }
+        
+        async function readFile(dirHandle, filename) {
+            const handle = await dirHandle.getFileHandle(filename);
+            return await handle.getFile();
+        }
+        
+        async function writeFile(dirHandle, filename, data) {
+            const handle = await dirHandle.getFileHandle(filename, {create: true});
+            const writer = await handle.createWritable();
+            await writer.write(data);
+            await writer.close();
+        }
+        
+        async function deleteFile(dirHandle, filename) {
+            await dirHandle.removeEntry(filename);
+        }
+        
+        // APPLICATION LAYER - Business Logic (Combines Pure + I/O)
+        async function loadInventory(dirHandle) {
+            const filenames = await listFiles(dirHandle);
+            return filenames.map(parseFilename);
+        }
+        
+        async function updateInventoryItem(dirHandle, oldFilename, transformation) {
+            const oldMetadata = parseFilename(oldFilename);
+            const newMetadata = transformName(oldMetadata, transformation);
+            const newFilename = generateFilename(newMetadata);
+            
+            const fileData = await readFile(dirHandle, oldFilename);
+            await writeFile(dirHandle, newFilename, fileData);
+            await deleteFile(dirHandle, oldFilename);
+            
+            return { old: oldFilename, new: newFilename };
+        }
+        
+        // PRESENTATION LAYER - UI Operations
+        async function pickFolder() {
+            try {
+                dirHandle = await window.showDirectoryPicker();
+                log('📁 Folder selected');
+                
+                const inventory = await loadInventory(dirHandle);
+                log(`📄 Before: [${inventory.map(i => i.original).join(', ')}]`);
+                
+                const results = [];
+                for (const item of inventory) {
+                    const result = await updateInventoryItem(dirHandle, item.original, 'reverse');
+                    results.push(result);
+                    log(`✅ ${result.old} → ${result.new}`);
+                }
+                
+                const newInventory = await loadInventory(dirHandle);
+                log(`📄 After: [${newInventory.map(i => i.original).join(', ')}]`);
+                
+            } catch (e) {
+                log(`❌ ${e.message}`);
+            }
+        }
+    </script>
+</body>
+</html>
