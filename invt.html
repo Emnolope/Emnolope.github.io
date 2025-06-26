@@ -49,10 +49,29 @@
       } catch(e) { console.log('Camera failed:', e); }
     }
     
-    function takePhoto() {
-      if (currentMode === 0) console.log('📸 Photo taken!');
+    // CAPTURE FUNCTION - Returns image data
+    function capturePhoto() {
+      const canvas = document.createElement('canvas');
+      const video = document.getElementById('camera');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      return canvas.toDataURL('image/jpeg');
     }
-    
+    // DOWNLOAD FUNCTION - Takes image data and saves it
+    function downloadPhoto(imageData) {
+      const filename = `photo_${Date.now()}.jpg`;
+      const link = document.createElement('a');
+      link.href = imageData;
+      link.download = filename;
+      link.click();
+    }
+
+    // CLICK HANDLER - Captures then downloads
+    function takePhoto() {
+      const imageData = capturePhoto();
+      downloadPhoto(imageData);
+    }
     // CORE LAYER - Pure Functions (No I/O)
     function parseFilename(filename) {
       const lastDot = filename.lastIndexOf('.');
