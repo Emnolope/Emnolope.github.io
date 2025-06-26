@@ -1,102 +1,137 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Layered Architecture File Demo</title>
+  <title>Inventory App</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .mode { display: none; }
+    .mode.active { display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; }
+    #modeBtn { position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px; }
+    #camera { width: 100vw; height: 100vh; object-fit: cover; cursor: pointer; }
+    .placeholder { display: flex; align-items: center; justify-content: center; font-size: 3em; background: #333; color: white; }
+  </style>
 </head>
 <body>
-    <button onclick="pickFolder()">Pick Folder</button>
-    <div id="output"></div>
-
-    <script>
-        let dirHandle;
-        
-        function log(msg) {
-            document.getElementById('output').innerHTML += `<div>${msg}</div>`;
-        }
-        
-        // CORE LAYER - Pure Functions (No I/O)
-        function parseFilename(filename) {
-            const lastDot = filename.lastIndexOf('.');
-            const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
-            const ext = lastDot > 0 ? filename.slice(lastDot) : '';
-            return { name, ext, original: filename };
-        }
-        
-        function generateFilename(metadata) {
-            return `${metadata.name}${metadata.ext}`;
-        }
-        
-        function transformName(metadata, rule) {
-            if (rule === 'reverse') {
-                return { ...metadata, name: metadata.name.split('').reverse().join('') };
-            }
-            return metadata;
-        }
-        
-        // SERVICE LAYER - I/O Operations (No Business Logic)
-        async function listFiles(dirHandle) {
-            const files = [];
-            for await (const [name, handle] of dirHandle.entries()) {
-                if (handle.kind === 'file') files.push(name);
-            }
-            return files;
-        }
-        
-        async function readFile(dirHandle, filename) {
-            const handle = await dirHandle.getFileHandle(filename);
-            return await handle.getFile();
-        }
-        
-        async function writeFile(dirHandle, filename, data) {
-            const handle = await dirHandle.getFileHandle(filename, {create: true});
-            const writer = await handle.createWritable();
-            await writer.write(data);
-            await writer.close();
-        }
-        
-        async function deleteFile(dirHandle, filename) {
-            await dirHandle.removeEntry(filename);
-        }
-        
-        // APPLICATION LAYER - Business Logic (Combines Pure + I/O)
-        async function loadInventory(dirHandle) {
-            const filenames = await listFiles(dirHandle);
-            return filenames.map(parseFilename);
-        }
-        
-        async function updateInventoryItem(dirHandle, oldFilename, transformation) {
-            const oldMetadata = parseFilename(oldFilename);
-            const newMetadata = transformName(oldMetadata, transformation);
-            const newFilename = generateFilename(newMetadata);
-            
-            const fileData = await readFile(dirHandle, oldFilename);
-            await writeFile(dirHandle, newFilename, fileData);
-            await deleteFile(dirHandle, oldFilename);
-            
-            return { old: oldFilename, new: newFilename };
-        }
-        
-        // PRESENTATION LAYER - UI Operations
-        async function pickFolder() {
-            try {
-                dirHandle = await window.showDirectoryPicker();
-                log('📁 Folder selected');
-                await processFiles();
-                await processFiles(); // Reverses back
-            } catch (e) {
-                log(`❌ ${e.message}`);
-            }
-        }
-        
-        async function processFiles() {
-            const inventory = await loadInventory(dirHandle);
-            log(`📄 Before: [${inventory.map(i => i.original).join(', ')}]`);
-            
-            for (const item of inventory) {
-                const result = await updateInventoryItem(dirHandle, item.original, 'reverse');
-                log(`✅ ${result.old} → ${result.new}`);
-            }
-        }
-    </script>
+  <div id="app">
+    <div id="mode0" class="mode">
+      <video id="camera" autoplay playsinline onclick="takePhoto()"></video>
+    </div>
+    <div id="mode1" class="mode placeholder">SLOW PICTURE MODE</div>
+    <div id="mode2" class="mode placeholder">GALLERY VIEW</div>
+    <div id="mode3" class="mode placeholder">TABLE VIEW</div>
+    <div id="mode4" class="mode placeholder">
+      <button onclick="pickFolder()">Pick Folder</button>
+      <div id="output"></div>
+    </div>
+  </div>
+  <button id="modeBtn" onclick="nextMode()"></button>
+  <script>
+    // UI STATE
+    const modes = ['RAPID', 'SLOW', 'GALLERY', 'TABLE', 'SETTINGS'];
+    let currentMode = 0;
+    
+    function nextMode() {
+      currentMode = (currentMode + 1) % modes.length;
+      render();
+    }
+    
+    function render() {
+      document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+      document.getElementById(`mode${currentMode}`).classList.add('active');
+      document.getElementById('modeBtn').textContent = modes[currentMode];
+    }
+    
+    // CAMERA
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        document.getElementById('camera').srcObject = stream;
+      } catch(e) { console.log('Camera failed:', e); }
+    }
+    
+    function takePhoto() {
+      if (currentMode === 0) console.log('📸 Photo taken!');
+    }
+    
+    // CORE LAYER - Pure Functions (No I/O)
+    function parseFilename(filename) {
+      const lastDot = filename.lastIndexOf('.');
+      const name = lastDot > 0 ? filename.slice(0, lastDot) : filename;
+      const ext = lastDot > 0 ? filename.slice(lastDot) : '';
+      return { name, ext, original: filename };
+    }
+    
+    function generateFilename(metadata) {
+      return `${metadata.name}${metadata.ext}`;
+    }
+    
+    function transformName(metadata, rule) {
+      if (rule === 'reverse') {
+        return { ...metadata, name: metadata.name.split('').reverse().join('') };
+      }
+      return metadata;
+    }
+    
+    // SERVICE LAYER - I/O Operations (No Business Logic)
+    async function listFiles(dirHandle) {
+      const files = [];
+      for await (const [name, handle] of dirHandle.entries()) {
+        if (handle.kind === 'file') files.push(name);
+      }
+      return files;
+    }
+    
+    async function readFile(dirHandle, filename) {
+      const handle = await dirHandle.getFileHandle(filename);
+      return await handle.getFile();
+    }
+    
+    async function writeFile(dirHandle, filename, data) {
+      const handle = await dirHandle.getFileHandle(filename, {create: true});
+      const writer = await handle.createWritable();
+      await writer.write(data);
+      await writer.close();
+    }
+    
+    async function deleteFile(dirHandle, filename) {
+      await dirHandle.removeEntry(filename);
+    }
+    
+    // APPLICATION LAYER - Business Logic (Combines Pure + I/O)
+    let dirHandle;
+    async function loadInventory(dirHandle) {
+      const filenames = await listFiles(dirHandle);
+      return filenames.map(parseFilename);
+    }
+    
+      async function updateInventoryItem(dirHandle, oldFilename, transformation) {
+      const oldMetadata = parseFilename(oldFilename);
+      const newMetadata = transformName(oldMetadata, transformation);
+      const newFilename = generateFilename(newMetadata);
+      
+      const fileData = await readFile(dirHandle, oldFilename);
+      await writeFile(dirHandle, newFilename, fileData);
+      await deleteFile(dirHandle, oldFilename);
+      
+      return { old: oldFilename, new: newFilename };
+    }
+    // UI OPERATIONS
+    function log(msg) {
+      document.getElementById('output').innerHTML += `<div>${msg}</div>`;
+    }
+    
+    async function pickFolder() {
+      try {
+        dirHandle = await window.showDirectoryPicker();
+        log('📁 Folder selected');
+        const inventory = await loadInventory(dirHandle);
+        log(`📄 Found: [${inventory.map(i => i.original).join(', ')}]`);
+      } catch (e) {
+        log(`❌ ${e.message}`);
+      }
+    }
+    
+    window.onload = () => { render(); startCamera(); };
+  </script>
 </body>
 </html>
