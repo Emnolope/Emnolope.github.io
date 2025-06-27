@@ -98,6 +98,7 @@ function render() {
   document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
   document.getElementById(`mode${currentMode}`).classList.add('active');
   document.getElementById('modeBtn').textContent = modes[currentMode];
+  
   if (currentMode === 2) {
     renderGallery();
   }
@@ -107,6 +108,7 @@ function log(msg) {
 }
 ////// DYNAMIC SCHEMA SYSTEM //////
 let schema = null;
+
 async function loadSchema() {
   if (!schema) {
     const response = await fetch('./schema.json');
@@ -114,6 +116,7 @@ async function loadSchema() {
   }
   return schema;
 }
+
 function generateUUID() {
   const now = new Date();
   const year = now.getFullYear();
@@ -125,30 +128,44 @@ function generateUUID() {
   const mil = String(now.getMilliseconds()).padStart(3, '0');
   return `${year}${month}${day}${hour}${min}${sec}${mil}`;
 }
+
 async function parseFilename(filename) {
   const currentSchema = await loadSchema();
   const [name, ext] = filename.split('.');
   const parts = name.split('_');
-  // Format: location_sublocation_category_flags_note_timestamp
-  if (parts.length < 2) return { original: filename, valid: false };
+  
+  // Bulletproof: handle any number of parts
+  if (parts.length < 1) return { original: filename, valid: false };
+  
   const result = {
     ext: ext || 'jpg',
     original: filename,
     valid: true,
     timestamp: parts[parts.length - 1] // Timestamp is always last
   };
+  
   const fieldNames = Object.keys(currentSchema);
   const nonFreetextFields = fieldNames.filter(f => currentSchema[f].type !== 'freetext');
   const freetextFields = fieldNames.filter(f => currentSchema[f].type === 'freetext');
+  
   let partIndex = 0;
+  
   // Parse non-freetext fields first
   for (const fieldName of nonFreetextFields) {
     const fieldConfig = currentSchema[fieldName];
     let rawValue = '';
+    
     if (partIndex < parts.length - 1) { // -1 because timestamp is last
       rawValue = parts[partIndex];
       partIndex++;
     }
+    
+    // Handle empty/underscore values as undefined
+    if (!rawValue || rawValue.trim() === '') {
+      result[fieldName] = undefined;
+      continue;
+    }
+    
     // Process value based on schema type
     if (fieldConfig.type === 'boolean') {
       if (rawValue === fieldConfig.true) {
@@ -156,83 +173,107 @@ async function parseFilename(filename) {
       } else if (rawValue === fieldConfig.false) {
         result[fieldName] = false;
       } else {
-        result[fieldName] = null; // Invalid boolean value
+        result[fieldName] = undefined; // Invalid/unknown boolean value
       }
     } else if (fieldConfig.type === 'multiple') {
-      // Split concatenated options into array
-      result[fieldName] = rawValue ? rawValue.split('') : [];
+      // Split concatenated options into array, handle empty gracefully
+      if (rawValue && rawValue.trim()) {
+        result[fieldName] = rawValue.split('');
+      } else {
+        result[fieldName] = undefined; // Empty multiple field
+      }
     } else {
-      // single type - keep as string
-      result[fieldName] = rawValue;
+      // single type - keep as string, empty becomes undefined
+      result[fieldName] = rawValue || undefined;
     }
   }
+  
   // Parse freetext fields (consume remaining parts except timestamp)
   for (const fieldName of freetextFields) {
     const textParts = [];
     while (partIndex < parts.length - 1) { // -1 because timestamp is last
-      textParts.push(parts[partIndex]);
+      const part = parts[partIndex];
+      if (part && part.trim()) { // Skip empty parts in freetext
+        textParts.push(part);
+      }
       partIndex++;
     }
-    result[fieldName] = textParts.join(' ');
+    
+    if (textParts.length > 0) {
+      result[fieldName] = textParts.join(' ');
+    } else {
+      result[fieldName] = undefined; // Empty freetext
+    }
   }
+  
   return result;
 }
+
 async function generateFilename(metadata) {
   const currentSchema = await loadSchema();
   const fieldNames = Object.keys(currentSchema);
   const parts = [];
+  
   // Add all schema fields first
   for (const fieldName of fieldNames) {
     const fieldConfig = currentSchema[fieldName];
     const value = metadata[fieldName];
+    
+    // Handle undefined as underscore (rapid fire mode)
+    if (value === undefined) {
+      parts.push('');
+      continue;
+    }
+    
     if (fieldConfig.type === 'boolean') {
       if (value === true) {
         parts.push(fieldConfig.true);
       } else if (value === false) {
         parts.push(fieldConfig.false);
       } else {
-        parts.push(''); // Invalid boolean
+        parts.push(''); // Invalid/undefined boolean
       }
     } else if (fieldConfig.type === 'multiple') {
       // Join array back into concatenated string
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && value.length > 0) {
         parts.push(value.join(''));
       } else {
-        parts.push(value || '');
+        parts.push(''); // Empty or invalid array
       }
     } else if (fieldConfig.type === 'freetext') {
-      // Replace spaces with underscores for filename
-      parts.push((value || '').replace(/ /g, ' '));
+      // Keep spaces as spaces, empty if no value
+      if (value && value.trim()) {
+        parts.push(value.trim());
+      } else {
+        parts.push(''); // Empty freetext
+      }
     } else {
-      // single type - keep as is
+      // single type - keep as is or empty
       parts.push(value || '');
     }
   }
+  
   // Add timestamp last
   parts.push(metadata.timestamp);
+  
   return `${parts.join('_')}.${metadata.ext || 'jpg'}`;
 }
+
 async function createEmptyMetadata() {
   const currentSchema = await loadSchema();
   const metadata = {
     timestamp: generateUUID(),
     ext: 'jpg'
   };
+  
+  // Rapid fire mode: everything is undefined (underscore placeholders)
   for (const fieldName of Object.keys(currentSchema)) {
-    const fieldConfig = currentSchema[fieldName];
-    if (fieldConfig.type === 'boolean') {
-      // Default to false for boolean fields
-      metadata[fieldName] = false;
-    } else if (fieldConfig.type === 'multiple') {
-      // Default to empty array for multiple fields
-      metadata[fieldName] = [];
-    } else {
-      // Default to empty string for single/freetext
-      metadata[fieldName] = '';
-    }
+    metadata[fieldName] = undefined;
   }
+  
   return metadata;
 }
+
 function transformMetadata(metadata, rule) {
   if (rule === 'reverse' && metadata.note) {
     return { ...metadata, note: metadata.note.split('').reverse().join('') };
@@ -249,10 +290,13 @@ async function pickFolder() {
     log(`❌ ${e.message}`);
   }
 }
+
 async function testParsing() {
+  // Test 1: Full data
   const testFilename = "Bando_F_wfe_GET_KEEP_UNSELECT_be careful with this item it is alive_20250626053144131.jpg";
   log('🧪 Testing filename parsing...');
   log(`Test file: ${testFilename}`);
+  
   const parsed = await parseFilename(testFilename);
   log('Parsed result:');
   for (const [key, value] of Object.entries(parsed)) {
@@ -262,10 +306,25 @@ async function testParsing() {
       log(`  ${key}: ${typeof value} "${value}"`);
     }
   }
+  
   if (parsed.valid) {
     const regenerated = await generateFilename(parsed);
     log(`Regenerated: ${regenerated}`);
     log(`Match: ${regenerated === testFilename ? '✅' : '❌'}`);
+  }
+  
+  log('---');
+  
+  // Test 2: Rapid fire mode (all underscores)
+  log('🔥 Testing rapid fire mode...');
+  const rapidMeta = await createEmptyMetadata();
+  const rapidFilename = await generateFilename(rapidMeta);
+  log(`Rapid fire filename: ${rapidFilename}`);
+  
+  const rapidParsed = await parseFilename(rapidFilename);
+  log('Rapid parsed:');
+  for (const [key, value] of Object.entries(rapidParsed)) {
+    log(`  ${key}: ${typeof value} "${value}"`);
   }
 }
 async function loadInventory() {
@@ -300,6 +359,7 @@ async function renderGallery() {
       log('File loaded:', file);
       const imageUrl = URL.createObjectURL(file);
       log('Image URL created:', imageUrl);
+      
       const img = document.createElement('img');
       img.src = imageUrl;
       img.className = 'gallery-item';
