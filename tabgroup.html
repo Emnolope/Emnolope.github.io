@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Group Status</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for the large number */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-100">
+
+    <div id="content" class="text-center">
+        <!-- The large number will be displayed here, large and centered as requested -->
+        <div id="big-number" class="font-extrabold text-[20rem] leading-none select-none">?</div>
+        <p id="info-text" class="mt-4 text-xl text-gray-600">Loading...</p>
+    </div>
+
+    <script>
+        // Configuration for the 5 levels (1-5)
+        const CONFIG = {
+            '1': { number: 1, color: '#10b981', colorName: 'Green' },   // Tailwind emerald-600
+            '2': { number: 2, color: '#f59e0b', colorName: 'Yellow' },  // Tailwind amber-500
+            '3': { number: 3, color: '#f97316', colorName: 'Orange' },  // Tailwind orange-600
+            '4': { number: 4, color: '#ef4444', colorName: 'Red' },     // Tailwind red-500
+            '5': { number: 5, color: '#000000', colorName: 'Black' }    // Black
+        };
+
+        const DEFAULT_CONFIG = { number: '?', color: '#6b7280', colorName: 'Default' }; // Gray
+
+        /**
+         * Parses the URL for the 'level' parameter.
+         * @returns {string|null} The value of the 'level' parameter.
+         */
+        function getUrlParameter() {
+            const urlParams = new URLSearchParams(window.location.search);
+            // *** CHANGE: Now looks for 'level' parameter ***
+            return urlParams.get('level');
+        }
+
+        /**
+         * Creates a dynamic favicon using a canvas and sets it in the document head.
+         * @param {number|string} number The number to display in the favicon.
+         * @param {string} color The color code for the favicon circle and text.
+         */
+        function createFavicon(number, color) {
+            const canvas = document.createElement('canvas');
+            const size = 64; // Favicon size in pixels
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // 1. Draw a colored background circle
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            // 2. Draw the number
+            ctx.fillStyle = '#ffffff'; // White text for visibility
+            if (color === '#000000') {
+                ctx.fillStyle = '#f3f4f6'; // Light gray text for black background
+            }
+            ctx.font = `bold ${size * 0.7}px 'Inter', sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(number.toString(), size / 2, size / 2 + 2); // +2 for slight vertical adjustment
+
+            // 3. Convert canvas to Data URL
+            const faviconUrl = canvas.toDataURL('image/png');
+
+            // 4. Update the link element in the head
+            let link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+            link.href = faviconUrl;
+        }
+
+        /**
+         * Initializes the page content based on the URL argument.
+         */
+        function initializePage() {
+            const level = getUrlParameter(); // Get the 'level' from the URL
+            const config = CONFIG[level] || DEFAULT_CONFIG;
+
+            const bigNumberEl = document.getElementById('big-number');
+            const infoTextEl = document.getElementById('info-text');
+
+            bigNumberEl.textContent = config.number;
+
+            // Apply color to the large number
+            bigNumberEl.style.color = config.color;
+
+            // Update info text
+            if (config === DEFAULT_CONFIG) {
+                // *** CHANGE: Updated message to reflect 'level' parameter ***
+                infoTextEl.textContent = 'No valid level found. Try adding ?level=1 to ?level=5 to the URL.';
+            } else {
+                // *** CHANGE: Updated message to reflect 'Level' display ***
+                infoTextEl.textContent = `Displaying Level ${config.number} in ${config.colorName}. Check the favicon!`;
+            }
+
+            // Create and set the dynamic favicon
+            createFavicon(config.number, config.color);
+        }
+
+        // Run the initialization function when the page loads
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
