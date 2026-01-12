@@ -1,42 +1,52 @@
 <!DOCTYPE html>
 <html>
+<head>
+<style>
+  /* Reset margins so the map sits flush against the corner */
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 6000px;
+    height: 5000px;
+  }
+
+  /* The outer container defines the 'canvas' size */
+  .mapouter {
+    position: relative;
+    width: 6000px;
+    height: 5000px;
+    background-color: #eee;
+  }
+
+  /* The canvas hides any weird scroll artifacts from the iframe itself */
+  .gmap_canvas {
+    overflow: hidden;
+    width: 6000px;
+    height: 5000px;
+  }
+
+  /* The actual Iframe at 1:1 scale—no more squishing */
+  #gmap_canvas {
+    width: 6000px;
+    height: 5000px;
+    border: none;
+  }
+</style>
+</head>
 <body>
 
-<h2>HTML Iframes</h2>
-<p>You can use the height and width attributes to specify the size of the iframe:</p>
+  <div class="mapouter">
+    <div class="gmap_canvas">
+      <iframe 
+        id="gmap_canvas" 
+        src="https://maps.google.com/maps?q=491%20W%20Fir%20Ave%20pinedale%20ca&t=&z=35&t=k&ie=UTF8&iwloc=&output=embed" 
+        frameborder="0" 
+        scrolling="no" 
+        marginheight="0" 
+        marginwidth="0">
+      </iframe>
+    </div>
+  </div>
 
-<div class="mapouter">
-<div class="gmap_canvas">
-<iframe 
-  width="6000" 
-  height="5000" 
-  id="gmap_canvas" 
-  src="https://maps.google.com/maps?q=491%20W%20Fir%20Ave%20pinedale%20ca&t=&z=35&t=k&ie=UTF8&iwloc=&output=embed" 
-  frameborder="0" 
-  scrolling="no" 
-  marginheight="0" 
-  marginwidth="0">
-</iframe>
-</div>
-<style>
-.mapouter {
-  position:relative;text-align:right;height:5000px;width:6000px;
-}
-.gmap_canvas {
-  overflow:hidden;
-  background:none!important;
-  height:5000px;
-  width:6000px;
-}
-#frame {
-        -ms-zoom: 2.00;
-        -moz-transform: scale(2.00);
-        -moz-transform-origin: 0 0;
-        -o-transform: scale(2.00);
-        -o-transform-origin: 0 0;
-        -webkit-transform: scale(2.00);
-        -webkit-transform-origin: 0 0;
-    }
-</style></div>
 </body>
 </html>
