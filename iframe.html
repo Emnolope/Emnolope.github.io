@@ -2,34 +2,20 @@
 <html>
 <head>
 <style>
-  /* Reset margins so the map sits flush against the corner */
-  body, html {
-    margin: 0;
-    padding: 0;
-    width: 6000px;
-    height: 5000px;
+  /* Define the dimensions once here */
+  :root {
+    --map-w: 4000px;
+    --map-h: 4000px;
   }
 
-  /* The outer container defines the 'canvas' size */
-  .mapouter {
-    position: relative;
-    width: 6000px;
-    height: 5000px;
-    background-color: #eee;
-  }
+  body, html { margin: 0; padding: 0; }
 
-  /* The canvas hides any weird scroll artifacts from the iframe itself */
-  .gmap_canvas {
-    overflow: hidden;
-    width: 6000px;
-    height: 5000px;
-  }
-
-  /* The actual Iframe at 1:1 scale—no more squishing */
-  #gmap_canvas {
-    width: 6000px;
-    height: 5000px;
+  .mapouter, .gmap_canvas, #gmap_canvas {
+    width: var(--map-w);
+    height: var(--map-h);
     border: none;
+    overflow: hidden;
+    display: block;
   }
 </style>
 </head>
@@ -40,10 +26,7 @@
       <iframe 
         id="gmap_canvas" 
         src="https://maps.google.com/maps?q=491%20W%20Fir%20Ave%20pinedale%20ca&t=&z=35&t=k&ie=UTF8&iwloc=&output=embed" 
-        frameborder="0" 
-        scrolling="no" 
-        marginheight="0" 
-        marginwidth="0">
+        scrolling="no">
       </iframe>
     </div>
   </div>
