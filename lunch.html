@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresno EBT Restaurant Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .map-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .map-container {
+                padding-bottom: 0;
+                height: calc(100vh - 80px);
+            }
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white p-4 shadow-md z-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <h1 class="text-xl font-black tracking-tight uppercase">Fresno EBT Map</h1>
+            </div>
+            <p class="hidden md:block text-slate-400 text-sm font-medium">Helping Fresno access hot meals with EBT.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="map-container w-full shadow-inner">
+            <!-- Your Google My Maps Embed -->
+            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1An428maRG-LrdfMcmFd494YuY7eMzec&ehbc=2E312F"></iframe>
+        </div>
+
+        <!-- Info Section -->
+        <section class="max-w-4xl mx-auto p-6 md:p-12">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">About This Map</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    This directory lists restaurants in the Fresno area that participate in the Restaurant Meals Program (RMP). 
+                    This program allows elderly, disabled, and homeless individuals to use their EBT benefits to purchase prepared hot meals.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
+                        <h3 class="font-bold text-yellow-900 mb-2">How to Use</h3>
+                        <p class="text-sm text-yellow-800">Browse the pins on the map above to find a location near you. Click on a pin to see the full address and business name.</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                        <h3 class="font-bold text-blue-900 mb-2">Updates</h3>
+                        <p class="text-sm text-blue-800">This list is generated from official public records. Always verify with the restaurant before ordering.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 p-8 text-center text-gray-500 text-sm">
+        <div class="max-w-7xl mx-auto">
+            <p>&copy; 2024 Fresno EBT Resource Guide. Not an official government website.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
