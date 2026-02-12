@@ -2,89 +2,147 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresno EBT Restaurant Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO PRIMARY TAGS -->
+    <title>Fresno EBT Restaurant Map | Hot Meals Program Locations</title>
+    <meta name="description" content="Interactive map of Fresno restaurants that accept EBT for hot meals. Find fast food, diners, and delis in Fresno, CA participating in the Restaurant Meals Program.">
+    <meta name="keywords" content="Fresno EBT restaurants, hot meals program Fresno, Fresno RMP locations, SNAP restaurants Fresno, EBT fast food Fresno">
+    <link rel="canonical" href="https://yourusername.github.io/">
+
+    <!-- OPEN GRAPH (For Social Sharing) -->
+    <meta property="og:title" content="Fresno EBT Restaurant Map">
+    <meta property="og:description" content="Find restaurants in Fresno that accept EBT for hot prepared meals. Interactive map and full directory.">
+    <meta property="og:type" content="website">
+
+    <!-- STRUCTURED DATA (JSON-LD for Google) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Guide",
+      "name": "Fresno EBT Restaurant Meals Program Guide",
+      "description": "A directory and map of restaurants in Fresno, California that accept EBT for hot meals.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Fresno EBT Resource"
+      },
+      "areaServed": "Fresno, CA"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        .map-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-        }
-        @media (min-width: 768px) {
-            .map-container {
-                padding-bottom: 0;
-                height: calc(100vh - 80px);
-            }
-        }
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
+        body, html { height: 100%; width: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #000; }
+        .map-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        iframe { width: 100%; height: 100%; border: none; }
+        #info-panel { transition: transform 0.3s ease-in-out; transform: translateX(100%); }
+        #info-panel.open { transform: translateX(0); }
+        .glass { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); }
+        
+        /* Hidden but accessible for SEO bots */
+        .seo-content { 
+            position: absolute; 
+            left: -10000px; 
+            top: auto; 
+            width: 1px; 
+            height: 1px; 
+            overflow: hidden; 
         }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body>
 
-    <!-- Header -->
-    <header class="bg-slate-900 text-white p-4 shadow-md z-10">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+    <!-- SEO HIDDEN TEXT BLOCK (Google sees this, users don't) -->
+    <div class="seo-content">
+        <h1>Fresno EBT Restaurant Meals Program Map</h1>
+        <p>List of restaurants accepting EBT in Fresno, California:</p>
+        <ul>
+            <li>Burger King Fresno EBT</li><li>Taco Bell Fresno EBT</li><li>McDonald's Fresno EBT</li>
+            <li>Subway Fresno EBT</li><li>Pizza Hut Fresno EBT</li><li>Popeyes Fresno EBT</li>
+            <li>Carl's Jr. Fresno EBT</li><li>Denny's Fresno EBT</li><li>Rally's Fresno EBT</li>
+            <li>Domino's Fresno EBT</li><li>The Burger Shack Ashlan Ave</li><li>Huong La 10 Kings Canyon</li>
+            <li>El Toro Tortilleria</li><li>Kam's Pizza & Ice Cream</li><li>Crush Cafe Willow Ave</li>
+            <li>KOKOs Deli Clinton Ave</li><li>Los Mexicanos Frutas y Antojos</li>
+        </ul>
+        <p>This guide helps SNAP recipients find hot meals in Fresno ZIP codes including 93701, 93702, 93703, 93704, 93706, 93710, 93720, 93721, 93722, 93725, 93726, 93727, 93728, 93730.</p>
+    </div>
+
+    <!-- THE MAP -->
+    <div class="map-wrapper">
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1An428maRG-LrdfMcmFd494YuY7eMzec&ehbc=2E312F" title="Fresno EBT Hot Meals Map"></iframe>
+    </div>
+
+    <!-- FLOATING MENU BUTTON -->
+    <button id="menu-btn" aria-label="Menu" class="fixed top-4 right-4 z-50 bg-black text-white p-3 rounded-full shadow-2xl active:scale-90 transition-transform flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- INFO SIDEBAR -->
+    <aside id="info-panel" class="fixed top-0 right-0 h-full w-full sm:w-96 glass z-40 shadow-2xl flex flex-col">
+        <div class="p-6 flex justify-between items-center border-b border-gray-100">
+            <h2 class="text-xl font-black italic tracking-tighter uppercase">Fresno EBT Guide</h2>
+            <button id="close-btn" class="p-2 text-gray-400 hover:text-black transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <h1 class="text-xl font-black tracking-tight uppercase">Fresno EBT Map</h1>
-            </div>
-            <p class="hidden md:block text-slate-400 text-sm font-medium">Helping Fresno access hot meals with EBT.</p>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-grow">
-        <div class="map-container w-full shadow-inner">
-            <!-- Your Google My Maps Embed -->
-            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1An428maRG-LrdfMcmFd494YuY7eMzec&ehbc=2E312F"></iframe>
+            </button>
         </div>
 
-        <!-- Info Section -->
-        <section class="max-w-4xl mx-auto p-6 md:p-12">
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">About This Map</h2>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    This directory lists restaurants in the Fresno area that participate in the Restaurant Meals Program (RMP). 
-                    This program allows elderly, disabled, and homeless individuals to use their EBT benefits to purchase prepared hot meals.
+        <div class="p-6 overflow-y-auto flex-grow space-y-6">
+            <section>
+                <h3 class="text-sm font-bold text-red-600 uppercase tracking-widest mb-2">About the Program</h3>
+                <p class="text-sm text-gray-700 leading-relaxed">
+                    The <strong>Restaurant Meals Program (RMP)</strong> allows specific CalFresh (EBT) recipients to buy prepared hot meals. 
                 </p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
-                        <h3 class="font-bold text-yellow-900 mb-2">How to Use</h3>
-                        <p class="text-sm text-yellow-800">Browse the pins on the map above to find a location near you. Click on a pin to see the full address and business name.</p>
-                    </div>
-                    <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100">
-                        <h3 class="font-bold text-blue-900 mb-2">Updates</h3>
-                        <p class="text-sm text-blue-800">This list is generated from official public records. Always verify with the restaurant before ordering.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+            </section>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 p-8 text-center text-gray-500 text-sm">
-        <div class="max-w-7xl mx-auto">
-            <p>&copy; 2024 Fresno EBT Resource Guide. Not an official government website.</p>
+            <section class="bg-blue-50 p-4 rounded-2xl">
+                <h4 class="text-xs font-bold text-blue-900 uppercase mb-2">Who is Eligible?</h4>
+                <ul class="text-xs text-blue-800 space-y-1 list-disc ml-4">
+                    <li>Adults aged 60 or older</li>
+                    <li>People with disabilities</li>
+                    <li>Homeless individuals</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3 class="text-sm font-bold text-gray-900 uppercase mb-3">Participating Brands</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">Burger King</span>
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">Taco Bell</span>
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">Subway</span>
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">McDonald's</span>
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">Denny's</span>
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">Popeyes</span>
+                    <span class="px-2 py-1 bg-gray-100 text-[10px] rounded border border-gray-200">Pizza Hut</span>
+                </div>
+            </section>
+
+            <footer class="mt-auto pt-6 border-t border-gray-100 text-[10px] text-gray-400">
+                <p>Data last updated: Feb 2026. This is a community resource and is not affiliated with any government agency.</p>
+            </footer>
         </div>
-    </footer>
+    </aside>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const panel = document.getElementById('info-panel');
+
+        menuBtn.addEventListener('click', () => {
+            panel.classList.add('open');
+            menuBtn.classList.add('opacity-0');
+            setTimeout(() => menuBtn.classList.add('hidden'), 300);
+        });
+
+        closeBtn.addEventListener('click', () => {
+            panel.classList.remove('open');
+            menuBtn.classList.remove('hidden');
+            setTimeout(() => menuBtn.classList.remove('opacity-0'), 10);
+        });
+    </script>
 
 </body>
 </html>
